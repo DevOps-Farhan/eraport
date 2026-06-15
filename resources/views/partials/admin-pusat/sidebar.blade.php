@@ -78,6 +78,20 @@
                 </a>
             </div>
         </details>
+
+        <a
+            href="{{ route('profil.edit') }}"
+            @class([
+                'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition',
+                'bg-indigo-50 text-indigo-700' => request()->routeIs('profil.*'),
+                'text-slate-600 hover:bg-slate-50 hover:text-slate-900' => ! request()->routeIs('profil.*'),
+            ])
+        >
+            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+            Akun Profil
+        </a>
     </nav>
 
     <div class="border-t border-slate-200 p-3">

@@ -54,4 +54,11 @@ class User extends Authenticatable
             PeranPengguna::PembinaEkstrakurikuler => 'pembina.dashboard',
         };
     }
+
+    public function layoutName(): string
+    {
+        return $this->isAdminPusat()
+            ? 'layouts.admin-pusat'
+            : 'layouts.app';
+    }
 }

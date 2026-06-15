@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\AdminPusat;
 
+use App\Enums\PeranPengguna;
 use App\Models\CabangSekolah;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,6 +29,7 @@ class PenggunaTest extends TestCase
         $response->assertSee('guru.alpha');
         $response->assertSee('Guru Alpha');
         $response->assertSee('Cabang Test');
+        $response->assertSee('Tambah Guru');
     }
 
     public function test_pencarian_guru_berdasarkan_nama(): void
@@ -68,5 +70,115 @@ class PenggunaTest extends TestCase
         $response->assertSee('Kelola Pembina Ekstrakurikuler');
         $response->assertSee('pembina.pramuka');
         $response->assertSee('Siti Aminah');
+    }
+
+    public function test_admin_pusat_dapat_menambah_guru(): void
+    {
+        $admin = User::factory()->adminPusat()->create();
+        $cabang = CabangSekolah::factory()->create();
+
+        $response = $this->actingAs($admin)->post(route('admin-pusat.pengguna.guru.store'), [
+            'username' => 'guru.baru',
+            'nama' => 'Guru Baru',
+            'email' => 'guru.baru@test.com',
+            'password' => 'password123',
+            'cabang_sekolah_id' => $cabang->id,
+            'aktif' => '1',
+        ]);
+
+        $response->assertRedirect(route('admin-pusat.pengguna.guru'));
+        $response->assertSessionHas('sukses');
+
+        $this->assertDatabaseHas('pengguna', [
+            'username' => 'guru.baru',
+            'peran' => PeranPengguna::Guru->value,
+            'cabang_sekolah_id' => $cabang->id,
+        ]);
+    }
+
+    public function test_admin_pusat_dapat_menambah_pembina(): void
+    {
+        $admin = User::factory()->adminPusat()->create();
+        $cabang = CabangSekolah::factory()->create();
+
+        $response = $this->actingAs($admin)->post(route('admin-pusat.pengguna.pembina.store'), [
+            'username' => 'pembina.baru',
+            'nama' => 'Pembina Baru',
+            'password' => 'password123',
+            'cabang_sekolah_id' => $cabang->id,
+            'aktif' => '1',
+        ]);
+
+        $response->assertRedirect(route('admin-pusat.pengguna.pembina'));
+        $this->assertDatabaseHas('pengguna', [
+            'username' => 'pembina.baru',
+            'peran' => PeranPengguna::PembinaEkstrakurikuler->value,
+        ]);
+    }
+
+    public function test_admin_pusat_dapat_memperbarui_guru(): void
+    {
+        $admin = User::factory()->adminPusat()->create();
+        $cabang = CabangSekolah::factory()->create();
+        $guru = User::factory()->guru()->create(['cabang_sekolah_id' => $cabang->id]);
+
+        $response = $this->actingAs($admin)->put(route('admin-pusat.pengguna.guru.update', $guru), [
+            'username' => $guru->username,
+            'nama' => 'Nama Diperbarui',
+            'email' => 'baru@test.com',
+            'cabang_sekolah_id' => $cabang->id,
+            'aktif' => '1',
+        ]);
+
+        $response->assertRedirect(route('admin-pusat.pengguna.guru'));
+        $this->assertDatabaseHas('pengguna', [
+            'id' => $guru->id,
+            'nama' => 'Nama Diperbarui',
+            'email' => 'baru@test.com',
+        ]);
+    }
+
+    public function test_admin_pusat_dapat_menghapus_guru(): void
+    {
+        $admin = User::factory()->adminPusat()->create();
+        $cabang = CabangSekolah::factory()->create();
+        $guru = User::factory()->guru()->create(['cabang_sekolah_id' => $cabang->id]);
+
+        $response = $this->actingAs($admin)->delete(route('admin-pusat.pengguna.guru.destroy', $guru));
+
+        $response->assertRedirect(route('admin-pusat.pengguna.guru'));
+        $response->assertSessionHas('sukses');
+        $this->assertDatabaseMissing('pengguna', ['id' => $guru->id]);
+    }
+
+    public function test_tidak_dapat_mengubah_guru_melalui_route_pembina(): void
+    {
+        $admin = User::factory()->adminPusat()->create();
+        $cabang = CabangSekolah::factory()->create();
+        $guru = User::factory()->guru()->create(['cabang_sekolah_id' => $cabang->id]);
+
+        $response = $this->actingAs($admin)->put(route('admin-pusat.pengguna.pembina.update', $guru), [
+            'username' => $guru->username,
+            'nama' => 'Coba Ubah',
+            'cabang_sekolah_id' => $cabang->id,
+            'aktif' => '1',
+        ]);
+
+        $response->assertNotFound();
+    }
+
+    public function test_guru_tidak_dapat_akses_crud_pengguna(): void
+    {
+        $cabang = CabangSekolah::factory()->create();
+        $guru = User::factory()->guru()->create(['cabang_sekolah_id' => $cabang->id]);
+
+        $response = $this->actingAs($guru)->post(route('admin-pusat.pengguna.guru.store'), [
+            'username' => 'guru.hacker',
+            'nama' => 'Hacker',
+            'password' => 'password123',
+            'cabang_sekolah_id' => $cabang->id,
+        ]);
+
+        $response->assertForbidden();
     }
 }

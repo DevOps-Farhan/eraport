@@ -13,19 +13,28 @@
                 <p class="text-lg font-semibold text-slate-900">eRaport</p>
                 <p class="text-sm text-slate-500">{{ auth()->user()->peran->label() }}</p>
             </div>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button
-                    type="submit"
+            <div class="flex items-center gap-3">
+                <a
+                    href="{{ route('profil.edit') }}"
                     class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                 >
-                    Keluar
-                </button>
-            </form>
+                    Profil
+                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button
+                        type="submit"
+                        class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    >
+                        Keluar
+                    </button>
+                </form>
+            </div>
         </div>
     </header>
 
     <main class="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+        @include('partials.flash')
         @yield('content')
     </main>
 </body>
