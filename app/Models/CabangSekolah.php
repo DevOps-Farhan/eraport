@@ -17,6 +17,7 @@ class CabangSekolah extends Model
     protected $fillable = [
         'kode',
         'nama',
+        'kepala_sekolah',
         'alamat',
         'telepon',
         'aktif',

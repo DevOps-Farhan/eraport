@@ -26,7 +26,8 @@ class RoleAccessTest extends TestCase
         $response = $this->actingAs($user)->get(route('admin-pusat.dashboard'));
 
         $response->assertOk();
-        $response->assertSee('Dashboard Admin Pusat');
+        $response->assertSee('Dashboard');
+        $response->assertSee('Selamat datang kembali');
     }
 
     public function test_admin_cabang_dapat_akses_dashboard_admin_cabang(): void

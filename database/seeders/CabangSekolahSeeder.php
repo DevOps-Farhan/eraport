@@ -12,6 +12,7 @@ class CabangSekolahSeeder extends Seeder
         CabangSekolah::query()->create([
             'kode' => 'CS-JKT-01',
             'nama' => 'SMK Negeri 1 Jakarta',
+            'kepala_sekolah' => 'Dr. Ahmad Wijaya, M.Pd.',
             'alamat' => 'Jl. Pendidikan No. 1, Jakarta Pusat',
             'telepon' => '021-12345678',
             'aktif' => true,

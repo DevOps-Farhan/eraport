@@ -20,6 +20,7 @@ class CabangSekolahFactory extends Factory
         return [
             'kode' => fake()->unique()->bothify('CS-###'),
             'nama' => fake()->company().' School',
+            'kepala_sekolah' => fake()->name(),
             'alamat' => fake()->address(),
             'telepon' => fake()->phoneNumber(),
             'aktif' => true,
