@@ -73,9 +73,61 @@ Route::middleware(['auth', 'active'])->group(function () {
                 ->name('pengguna.pembina.destroy');
         });
 
-    Route::view('/admin-cabang', 'dashboard.admin-cabang')
+    Route::prefix('admin-cabang')
         ->middleware('role:admin_cabang')
-        ->name('admin-cabang.dashboard');
+        ->name('admin-cabang.')
+        ->group(function () {
+            Route::view('/', 'admin-cabang.dashboard')->name('dashboard');
+
+            Route::prefix('data-akademik')->name('data-akademik.')->group(function () {
+                Route::view('/tahun-ajaran', 'admin-cabang.placeholder', [
+                    'judul' => 'Tahun Ajaran',
+                    'deskripsi' => 'Kelola tahun ajaran aktif dan arsip tahun ajaran cabang sekolah.',
+                ])->name('tahun-ajaran');
+
+                Route::view('/jurusan', 'admin-cabang.placeholder', [
+                    'judul' => 'Jurusan',
+                    'deskripsi' => 'Kelola data jurusan atau program keahlian di cabang sekolah.',
+                ])->name('jurusan');
+
+                Route::view('/kelas', 'admin-cabang.placeholder', [
+                    'judul' => 'Kelas',
+                    'deskripsi' => 'Kelola data kelas per jurusan dan tingkat.',
+                ])->name('kelas');
+
+                Route::view('/mata-pelajaran', 'admin-cabang.placeholder', [
+                    'judul' => 'Mata Pelajaran',
+                    'deskripsi' => 'Kelola daftar mata pelajaran yang diajarkan di cabang sekolah.',
+                ])->name('mata-pelajaran');
+
+                Route::view('/ekstrakurikuler', 'admin-cabang.placeholder', [
+                    'judul' => 'Ekstrakurikuler',
+                    'deskripsi' => 'Kelola kegiatan ekstrakurikuler yang tersedia di cabang sekolah.',
+                ])->name('ekstrakurikuler');
+
+                Route::view('/penugasan-mengajar', 'admin-cabang.placeholder', [
+                    'judul' => 'Penugasan Mengajar',
+                    'deskripsi' => 'Atur penugasan guru ke mata pelajaran dan kelas.',
+                ])->name('penugasan-mengajar');
+            });
+
+            Route::prefix('master-data')->name('master-data.')->group(function () {
+                Route::view('/guru', 'admin-cabang.placeholder', [
+                    'judul' => 'Guru',
+                    'deskripsi' => 'Kelola data guru di cabang sekolah Anda.',
+                ])->name('guru');
+
+                Route::view('/pembina', 'admin-cabang.placeholder', [
+                    'judul' => 'Pembina Ekstrakurikuler',
+                    'deskripsi' => 'Kelola data pembina ekstrakurikuler di cabang sekolah Anda.',
+                ])->name('pembina');
+
+                Route::view('/siswa', 'admin-cabang.placeholder', [
+                    'judul' => 'Siswa',
+                    'deskripsi' => 'Kelola data siswa di cabang sekolah Anda.',
+                ])->name('siswa');
+            });
+        });
 
     Route::view('/guru', 'dashboard.guru')
         ->middleware('role:guru')

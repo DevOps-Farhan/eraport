@@ -45,6 +45,11 @@ class User extends Authenticatable
         return $this->peran === PeranPengguna::AdminPusat;
     }
 
+    public function isAdminCabang(): bool
+    {
+        return $this->peran === PeranPengguna::AdminCabang;
+    }
+
     public function dashboardRouteName(): string
     {
         return match ($this->peran) {
@@ -57,8 +62,10 @@ class User extends Authenticatable
 
     public function layoutName(): string
     {
-        return $this->isAdminPusat()
-            ? 'layouts.admin-pusat'
-            : 'layouts.app';
+        return match ($this->peran) {
+            PeranPengguna::AdminPusat => 'layouts.admin-pusat',
+            PeranPengguna::AdminCabang => 'layouts.admin-cabang',
+            default => 'layouts.app',
+        };
     }
 }

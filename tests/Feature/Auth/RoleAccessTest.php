@@ -37,7 +37,10 @@ class RoleAccessTest extends TestCase
         $response = $this->actingAs($user)->get(route('admin-cabang.dashboard'));
 
         $response->assertOk();
-        $response->assertSee('Dashboard Admin Cabang');
+        $response->assertSee('Dashboard');
+        $response->assertSee('Data Akademik');
+        $response->assertSee('Master Data');
+        $response->assertSee('Profil Akun');
     }
 
     public function test_pembina_dapat_akses_dashboard_pembina(): void
