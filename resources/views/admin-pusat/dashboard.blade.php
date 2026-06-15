@@ -42,7 +42,8 @@
                     </svg>
                 </div>
             </div>
-            <div class="mt-4 flex gap-4 text-sm">
+            <div class="mt-4 flex flex-wrap gap-4 text-sm">
+                <a href="{{ route('admin-pusat.pengguna.admin-cabang') }}" class="font-medium text-indigo-600 hover:text-indigo-700">Admin Cabang →</a>
                 <a href="{{ route('admin-pusat.pengguna.guru') }}" class="font-medium text-indigo-600 hover:text-indigo-700">Guru →</a>
                 <a href="{{ route('admin-pusat.pengguna.pembina') }}" class="font-medium text-indigo-600 hover:text-indigo-700">Pembina →</a>
             </div>

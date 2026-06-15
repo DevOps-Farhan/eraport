@@ -40,7 +40,9 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::delete('/cabang-sekolah/{cabang_sekolah}', [CabangSekolahController::class, 'destroy'])->name('cabang-sekolah.destroy');
 
             Route::get('/pengguna/guru', [PenggunaController::class, 'guru'])->name('pengguna.guru');
-            Route::post('/pengguna/guru', [PenggunaController::class, 'store'])->name('pengguna.guru.store');
+            Route::post('/pengguna/guru', [PenggunaController::class, 'store'])
+                ->defaults('tipe', 'guru')
+                ->name('pengguna.guru.store');
             Route::put('/pengguna/guru/{pengguna}', [PenggunaController::class, 'update'])
                 ->defaults('tipe', 'guru')
                 ->name('pengguna.guru.update');
@@ -48,8 +50,21 @@ Route::middleware(['auth', 'active'])->group(function () {
                 ->defaults('tipe', 'guru')
                 ->name('pengguna.guru.destroy');
 
+            Route::get('/pengguna/admin-cabang', [PenggunaController::class, 'adminCabang'])->name('pengguna.admin-cabang');
+            Route::post('/pengguna/admin-cabang', [PenggunaController::class, 'store'])
+                ->defaults('tipe', 'admin-cabang')
+                ->name('pengguna.admin-cabang.store');
+            Route::put('/pengguna/admin-cabang/{pengguna}', [PenggunaController::class, 'update'])
+                ->defaults('tipe', 'admin-cabang')
+                ->name('pengguna.admin-cabang.update');
+            Route::delete('/pengguna/admin-cabang/{pengguna}', [PenggunaController::class, 'destroy'])
+                ->defaults('tipe', 'admin-cabang')
+                ->name('pengguna.admin-cabang.destroy');
+
             Route::get('/pengguna/pembina', [PenggunaController::class, 'pembina'])->name('pengguna.pembina');
-            Route::post('/pengguna/pembina', [PenggunaController::class, 'store'])->name('pengguna.pembina.store');
+            Route::post('/pengguna/pembina', [PenggunaController::class, 'store'])
+                ->defaults('tipe', 'pembina')
+                ->name('pengguna.pembina.store');
             Route::put('/pengguna/pembina/{pengguna}', [PenggunaController::class, 'update'])
                 ->defaults('tipe', 'pembina')
                 ->name('pengguna.pembina.update');

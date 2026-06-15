@@ -37,6 +37,7 @@ class DashboardTest extends TestCase
         $response->assertSee('Dashboard');
         $response->assertSee('Kelola Semua Cabang');
         $response->assertSee('Kelola Pengguna');
+        $response->assertSee('Admin Cabang');
         $response->assertSee('Guru');
         $response->assertSee('Pembina');
         $response->assertSee('Logout');

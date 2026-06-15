@@ -54,6 +54,50 @@ class PenggunaTest extends TestCase
         $response->assertDontSee('Budi Santoso');
     }
 
+    public function test_halaman_admin_cabang_menampilkan_daftar_admin_cabang(): void
+    {
+        $admin = User::factory()->adminPusat()->create();
+        $cabang = CabangSekolah::factory()->create(['nama' => 'Cabang Jakarta']);
+        User::factory()->adminCabang()->create([
+            'username' => 'admin.jakarta',
+            'nama' => 'Admin Jakarta',
+            'cabang_sekolah_id' => $cabang->id,
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('admin-pusat.pengguna.admin-cabang'));
+
+        $response->assertOk();
+        $response->assertSee('Kelola Admin Cabang');
+        $response->assertSee('admin.jakarta');
+        $response->assertSee('Admin Jakarta');
+        $response->assertSee('Cabang Jakarta');
+        $response->assertSee('Tambah Admin Cabang');
+    }
+
+    public function test_admin_pusat_dapat_menambah_admin_cabang(): void
+    {
+        $admin = User::factory()->adminPusat()->create();
+        $cabang = CabangSekolah::factory()->create();
+
+        $response = $this->actingAs($admin)->post(route('admin-pusat.pengguna.admin-cabang.store'), [
+            'username' => 'admin.baru',
+            'nama' => 'Admin Baru',
+            'email' => 'admin.baru@test.com',
+            'password' => 'password123',
+            'cabang_sekolah_id' => $cabang->id,
+            'aktif' => '1',
+        ]);
+
+        $response->assertRedirect(route('admin-pusat.pengguna.admin-cabang'));
+        $response->assertSessionHas('sukses');
+
+        $this->assertDatabaseHas('pengguna', [
+            'username' => 'admin.baru',
+            'peran' => PeranPengguna::AdminCabang->value,
+            'cabang_sekolah_id' => $cabang->id,
+        ]);
+    }
+
     public function test_halaman_pembina_menampilkan_daftar_pembina(): void
     {
         $admin = User::factory()->adminPusat()->create();

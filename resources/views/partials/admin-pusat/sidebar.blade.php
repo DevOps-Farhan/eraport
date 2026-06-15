@@ -57,6 +57,16 @@
 
             <div class="ml-4 mt-1 space-y-1 border-l border-slate-200 pl-3">
                 <a
+                    href="{{ route('admin-pusat.pengguna.admin-cabang') }}"
+                    @class([
+                        'block rounded-lg px-3 py-2 text-sm transition',
+                        'bg-indigo-50 font-medium text-indigo-700' => request()->routeIs('admin-pusat.pengguna.admin-cabang'),
+                        'text-slate-600 hover:bg-slate-50 hover:text-slate-900' => ! request()->routeIs('admin-pusat.pengguna.admin-cabang'),
+                    ])
+                >
+                    Admin Cabang
+                </a>
+                <a
                     href="{{ route('admin-pusat.pengguna.guru') }}"
                     @class([
                         'block rounded-lg px-3 py-2 text-sm transition',

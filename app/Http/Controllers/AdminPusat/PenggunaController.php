@@ -20,6 +20,11 @@ class PenggunaController extends Controller
         return $this->index($request, PeranPengguna::Guru);
     }
 
+    public function adminCabang(Request $request): View
+    {
+        return $this->index($request, PeranPengguna::AdminCabang);
+    }
+
     public function pembina(Request $request): View
     {
         return $this->index($request, PeranPengguna::PembinaEkstrakurikuler);
@@ -27,9 +32,7 @@ class PenggunaController extends Controller
 
     public function store(StorePenggunaRequest $request): RedirectResponse
     {
-        $peran = str_contains($request->route()->getName(), 'pembina')
-            ? PeranPengguna::PembinaEkstrakurikuler
-            : PeranPengguna::Guru;
+        $peran = $this->resolvePeranFromTipe($request->route('tipe'));
 
         User::query()->create([
             'username' => $request->string('username')->value(),
@@ -121,6 +124,7 @@ class PenggunaController extends Controller
     {
         return match ($tipe) {
             'guru' => PeranPengguna::Guru,
+            'admin-cabang' => PeranPengguna::AdminCabang,
             'pembina' => PeranPengguna::PembinaEkstrakurikuler,
             default => throw new NotFoundHttpException,
         };
@@ -137,6 +141,7 @@ class PenggunaController extends Controller
     {
         return match ($peran) {
             PeranPengguna::Guru => 'admin-pusat.pengguna.guru',
+            PeranPengguna::AdminCabang => 'admin-pusat.pengguna.admin-cabang',
             PeranPengguna::PembinaEkstrakurikuler => 'admin-pusat.pengguna.pembina',
             default => 'admin-pusat.dashboard',
         };
@@ -146,6 +151,7 @@ class PenggunaController extends Controller
     {
         return match ($peran) {
             PeranPengguna::Guru => 'guru',
+            PeranPengguna::AdminCabang => 'admin-cabang',
             PeranPengguna::PembinaEkstrakurikuler => 'pembina',
             default => 'guru',
         };
