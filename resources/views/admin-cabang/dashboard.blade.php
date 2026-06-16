@@ -19,7 +19,7 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 class="text-sm font-medium text-slate-500">Data Akademik</h2>
             <p class="mt-2 text-sm text-slate-600">Kelola tahun ajaran, jurusan, kelas, mata pelajaran, dan penugasan mengajar.</p>
-            <a href="{{ route('admin-cabang.data-akademik.tahun-ajaran') }}" class="mt-4 inline-flex text-sm font-medium text-emerald-600 hover:text-emerald-700">
+            <a href="{{ route('admin-cabang.data-akademik.tahun-ajaran.index') }}" class="mt-4 inline-flex text-sm font-medium text-emerald-600 hover:text-emerald-700">
                 Buka data akademik →
             </a>
         </div>

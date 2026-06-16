@@ -51,7 +51,7 @@
             </summary>
 
             <div class="ml-4 mt-1 space-y-1 border-l border-slate-200 pl-3">
-                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.tahun-ajaran', 'label' => 'Tahun Ajaran'])
+                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.tahun-ajaran.index', 'label' => 'Tahun Ajaran'])
                 @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.jurusan', 'label' => 'Jurusan'])
                 @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.kelas', 'label' => 'Kelas'])
                 @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.mata-pelajaran', 'label' => 'Mata Pelajaran'])

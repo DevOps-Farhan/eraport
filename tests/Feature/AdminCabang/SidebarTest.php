@@ -43,11 +43,11 @@ class SidebarTest extends TestCase
     {
         $admin = User::factory()->adminCabang()->create();
 
-        $response = $this->actingAs($admin)->get(route('admin-cabang.data-akademik.tahun-ajaran'));
+        $response = $this->actingAs($admin)->get(route('admin-cabang.data-akademik.tahun-ajaran.index'));
 
         $response->assertOk();
         $response->assertSee('Tahun Ajaran');
-        $response->assertSee('Halaman dalam pengembangan');
+        $response->assertSee('Tambah Tahun Ajaran');
     }
 
     public function test_guru_tidak_dapat_akses_halaman_admin_cabang(): void

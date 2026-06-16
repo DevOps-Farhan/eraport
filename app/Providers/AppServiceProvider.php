@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\KonteksAkademik;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,5 +23,16 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Auth::guard('web')->setRememberDuration(60 * 24 * 30);
+
+        View::composer('layouts.admin-cabang', function ($view) {
+            $user = auth()->user();
+
+            if ($user?->isAdminCabang() && $user->cabang_sekolah_id) {
+                $view->with(
+                    'tahunAjaranAktif',
+                    app(KonteksAkademik::class)->tahunAjaranAktif($user->cabang_sekolah_id),
+                );
+            }
+        });
     }
 }

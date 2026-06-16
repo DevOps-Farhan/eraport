@@ -40,4 +40,12 @@ class CabangSekolah extends Model
     {
         return $this->hasMany(User::class, 'cabang_sekolah_id');
     }
+
+    /**
+     * @return HasMany<TahunAjaran, $this>
+     */
+    public function tahunAjaran(): HasMany
+    {
+        return $this->hasMany(TahunAjaran::class, 'cabang_sekolah_id');
+    }
 }

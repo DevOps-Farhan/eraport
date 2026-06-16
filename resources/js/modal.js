@@ -5,6 +5,86 @@ const peranLabels = {
     pembina_ekstrakurikuler: 'Pembina Ekstrakurikuler',
 };
 
+const statusTahunAjaranLabels = {
+    draft: 'Draft',
+    aktif: 'Aktif',
+    ditutup: 'Ditutup',
+};
+
+const statusSemesterLabels = {
+    belum_dimulai: 'Belum Dimulai',
+    berjalan: 'Berjalan',
+    selesai: 'Selesai',
+};
+
+const jenisSemesterLabels = {
+    ganjil: 'Ganjil',
+    genap: 'Genap',
+};
+
+export const fillTahunAjaranForm = (prefix, tahunAjaran) => {
+    const setValue = (field, value) => {
+        const element = document.getElementById(`${prefix}-${field}`);
+        if (element) {
+            element.value = value ?? '';
+        }
+    };
+
+    setValue('nama', tahunAjaran.nama);
+    setValue('tanggal_mulai', tahunAjaran.tanggal_mulai?.substring(0, 10));
+    setValue('status', statusTahunAjaranLabels[tahunAjaran.status] ?? tahunAjaran.status);
+    setValue('tanggal_selesai', tahunAjaran.tanggal_selesai?.substring(0, 10) ?? '—');
+
+    const semesterList = document.getElementById('detail-semester-list');
+    if (semesterList && tahunAjaran.semester) {
+        semesterList.innerHTML = tahunAjaran.semester.map((semester) => `
+            <p><span class="font-medium">Semester ${jenisSemesterLabels[semester.jenis] ?? semester.jenis}:</span> ${statusSemesterLabels[semester.status] ?? semester.status}</p>
+        `).join('');
+    }
+
+    const logList = document.getElementById('detail-log-list');
+    if (logList) {
+        const logs = tahunAjaran.log_akademik ?? [];
+        if (logs.length === 0) {
+            logList.innerHTML = '';
+        } else {
+            logList.innerHTML = `
+                <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Riwayat</h3>
+                <ul class="mt-2 space-y-2">
+                    ${logs.map((log) => `
+                        <li class="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2 text-sm">
+                            <p class="font-medium text-slate-900">${log.aksi?.replace(/_/g, ' ') ?? log.aksi}</p>
+                            ${log.keterangan ? `<p class="text-slate-600">${log.keterangan}</p>` : ''}
+                            <p class="text-xs text-slate-500">${log.pengguna?.nama ?? 'Sistem'}</p>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
+    }
+};
+
+export const fillKonfirmasiTahunAjaran = (konfirmasi) => {
+    const form = document.getElementById('form-konfirmasi-tahun-ajaran');
+    const judul = document.getElementById('konfirmasi-tahun-ajaran-judul');
+    const pesan = document.getElementById('konfirmasi-tahun-ajaran-pesan');
+    const submit = document.getElementById('konfirmasi-tahun-ajaran-submit');
+
+    if (form) {
+        form.action = konfirmasi.action ?? '';
+    }
+    if (judul) {
+        judul.textContent = konfirmasi.judul ?? 'Konfirmasi';
+    }
+    if (pesan) {
+        pesan.textContent = konfirmasi.pesan ?? '';
+    }
+    if (submit) {
+        submit.textContent = konfirmasi.submitLabel ?? 'Lanjutkan';
+        submit.className = `rounded-xl px-4 py-2 text-sm font-semibold text-white ${konfirmasi.submitClass ?? 'bg-emerald-600 hover:bg-emerald-700'}`;
+    }
+};
+
 export const fillPenggunaForm = (prefix, pengguna) => {
     const setValue = (field, value) => {
         const element = document.getElementById(`${prefix}-${field}`);
@@ -124,6 +204,33 @@ export const openModal = (modalId, data = null, tipe = null) => {
                 namaLabel.textContent = data.nama;
             }
         }
+
+        if (modalId === 'modal-edit-tahun-ajaran') {
+            const form = document.getElementById('form-edit-tahun-ajaran');
+            if (form) {
+                form.action = `/admin-cabang/data-akademik/tahun-ajaran/${data.id}`;
+            }
+            fillTahunAjaranForm('edit', data);
+        }
+
+        if (modalId === 'modal-detail-tahun-ajaran') {
+            fillTahunAjaranForm('detail', data);
+        }
+
+        if (modalId === 'modal-hapus-tahun-ajaran') {
+            const form = document.getElementById('form-hapus-tahun-ajaran');
+            const namaLabel = document.getElementById('hapus-tahun-ajaran-nama');
+            if (form) {
+                form.action = `/admin-cabang/data-akademik/tahun-ajaran/${data.id}`;
+            }
+            if (namaLabel) {
+                namaLabel.textContent = data.nama;
+            }
+        }
+    }
+
+    if (modalId === 'modal-konfirmasi-tahun-ajaran' && data) {
+        fillKonfirmasiTahunAjaran(data);
     }
 
     modal.classList.remove('hidden');
@@ -153,6 +260,14 @@ export const initModals = () => {
 
             if (trigger.dataset.pengguna) {
                 data = JSON.parse(trigger.dataset.pengguna);
+            }
+
+            if (trigger.dataset.tahunAjaran) {
+                data = JSON.parse(trigger.dataset.tahunAjaran);
+            }
+
+            if (trigger.dataset.konfirmasi) {
+                data = JSON.parse(trigger.dataset.konfirmasi);
             }
 
             openModal(modalId, data, tipe);

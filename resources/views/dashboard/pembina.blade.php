@@ -13,5 +13,14 @@
                 Cabang: <span class="font-medium text-slate-700">{{ auth()->user()->cabangSekolah->nama }}</span>
             </p>
         @endif
+
+        <div class="mt-6">
+            <a
+                href="{{ route('arsip.tahun-ajaran.index') }}"
+                class="inline-flex items-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+            >
+                Arsip Tahun Ajaran
+            </a>
+        </div>
     </div>
 @endsection

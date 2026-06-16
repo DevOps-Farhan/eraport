@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminCabang\TahunAjaranController;
+use App\Http\Controllers\ArsipTahunAjaranController;
 use App\Http\Controllers\AdminPusat\CabangSekolahController;
 use App\Http\Controllers\AdminPusat\DashboardController;
 use App\Http\Controllers\AdminPusat\PenggunaController;
@@ -80,10 +82,17 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::view('/', 'admin-cabang.dashboard')->name('dashboard');
 
             Route::prefix('data-akademik')->name('data-akademik.')->group(function () {
-                Route::view('/tahun-ajaran', 'admin-cabang.placeholder', [
-                    'judul' => 'Tahun Ajaran',
-                    'deskripsi' => 'Kelola tahun ajaran aktif dan arsip tahun ajaran cabang sekolah.',
-                ])->name('tahun-ajaran');
+                Route::get('/tahun-ajaran', [TahunAjaranController::class, 'index'])->name('tahun-ajaran.index');
+                Route::post('/tahun-ajaran', [TahunAjaranController::class, 'store'])->name('tahun-ajaran.store');
+                Route::put('/tahun-ajaran/{tahun_ajaran}', [TahunAjaranController::class, 'update'])->name('tahun-ajaran.update');
+                Route::delete('/tahun-ajaran/{tahun_ajaran}', [TahunAjaranController::class, 'destroy'])->name('tahun-ajaran.destroy');
+                Route::post('/tahun-ajaran/{tahun_ajaran}/aktifkan', [TahunAjaranController::class, 'aktifkan'])->name('tahun-ajaran.aktifkan');
+                Route::post('/tahun-ajaran/{tahun_ajaran}/pindah-genap', [TahunAjaranController::class, 'pindahKeSemesterGenap'])->name('tahun-ajaran.pindah-genap');
+                Route::post('/tahun-ajaran/{tahun_ajaran}/akhiri-genap', [TahunAjaranController::class, 'akhiriSemesterGenap'])->name('tahun-ajaran.akhiri-genap');
+                Route::post('/tahun-ajaran/{tahun_ajaran}/tutup', [TahunAjaranController::class, 'tutup'])->name('tahun-ajaran.tutup');
+                Route::post('/tahun-ajaran/{tahun_ajaran}/kembalikan-ganjil', [TahunAjaranController::class, 'kembalikanKeGanjil'])->name('tahun-ajaran.kembalikan-ganjil');
+                Route::post('/tahun-ajaran/{tahun_ajaran}/buka-kembali-genap', [TahunAjaranController::class, 'bukaKembaliGenap'])->name('tahun-ajaran.buka-kembali-genap');
+                Route::post('/tahun-ajaran/{tahun_ajaran}/buka-kembali', [TahunAjaranController::class, 'bukaKembali'])->name('tahun-ajaran.buka-kembali');
 
                 Route::view('/jurusan', 'admin-cabang.placeholder', [
                     'judul' => 'Jurusan',
@@ -136,4 +145,9 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::view('/pembina', 'dashboard.pembina')
         ->middleware('role:pembina_ekstrakurikuler')
         ->name('pembina.dashboard');
+
+    Route::middleware('role:guru,pembina_ekstrakurikuler')->group(function () {
+        Route::get('/arsip/tahun-ajaran', [ArsipTahunAjaranController::class, 'index'])->name('arsip.tahun-ajaran.index');
+        Route::get('/arsip/tahun-ajaran/{tahun_ajaran}', [ArsipTahunAjaranController::class, 'show'])->name('arsip.tahun-ajaran.show');
+    });
 });
