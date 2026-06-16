@@ -159,9 +159,46 @@ Route::middleware(['auth', 'active'])->group(function () {
             });
         });
 
-    Route::view('/guru', 'dashboard.guru')
+    Route::prefix('guru')
         ->middleware('role:guru')
-        ->name('guru.dashboard');
+        ->name('guru.')
+        ->group(function () {
+            Route::view('/', 'guru.dashboard')->name('dashboard');
+
+            Route::prefix('kelola-nilai')->name('kelola-nilai.')->group(function () {
+                Route::view('/tujuan-pembelajaran', 'guru.placeholder', [
+                    'judul' => 'Tujuan Pembelajaran',
+                    'deskripsi' => 'Kelola tujuan pembelajaran untuk mata pelajaran yang Anda ampu.',
+                ])->name('tujuan-pembelajaran');
+
+                Route::view('/input-nilai-tp', 'guru.placeholder', [
+                    'judul' => 'Input Nilai Tujuan Pembelajaran',
+                    'deskripsi' => 'Input nilai capaian tujuan pembelajaran per siswa.',
+                ])->name('input-nilai-tp');
+
+                Route::view('/nilai-ujian', 'guru.placeholder', [
+                    'judul' => 'Nilai Ujian',
+                    'deskripsi' => 'Input dan kelola nilai ujian mata pelajaran.',
+                ])->name('nilai-ujian');
+            });
+
+            Route::prefix('wali-kelas')->name('wali-kelas.')->group(function () {
+                Route::view('/kelas', 'guru.placeholder', [
+                    'judul' => 'Kelola Data Kelas sebagai Wali',
+                    'deskripsi' => 'Kelola data siswa dan informasi kelas yang Anda wali.',
+                ])->name('kelas');
+
+                Route::view('/absensi-catatan', 'guru.placeholder', [
+                    'judul' => 'Rekap Absensi dan Catatan',
+                    'deskripsi' => 'Rekap kehadiran siswa dan catatan wali kelas.',
+                ])->name('absensi-catatan');
+
+                Route::view('/leger-raport', 'guru.placeholder', [
+                    'judul' => 'Leger & Cetak Raport',
+                    'deskripsi' => 'Lihat leger nilai dan cetak raport siswa.',
+                ])->name('leger-raport');
+            });
+        });
 
     Route::view('/pembina', 'dashboard.pembina')
         ->middleware('role:pembina_ekstrakurikuler')

@@ -24,10 +24,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Auth::guard('web')->setRememberDuration(60 * 24 * 30);
 
-        View::composer('layouts.admin-cabang', function ($view) {
+        View::composer(['layouts.admin-cabang', 'layouts.guru'], function ($view) {
             $user = auth()->user();
 
-            if ($user?->isAdminCabang() && $user->cabang_sekolah_id) {
+            if ($user?->cabang_sekolah_id && ($user->isAdminCabang() || $user->isGuru())) {
                 $view->with(
                     'tahunAjaranAktif',
                     app(KonteksAkademik::class)->tahunAjaranAktif($user->cabang_sekolah_id),

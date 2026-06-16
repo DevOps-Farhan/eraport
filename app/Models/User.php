@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->peran === PeranPengguna::AdminCabang;
     }
 
+    public function isGuru(): bool
+    {
+        return $this->peran === PeranPengguna::Guru;
+    }
+
     public function dashboardRouteName(): string
     {
         return match ($this->peran) {
@@ -65,6 +70,7 @@ class User extends Authenticatable
         return match ($this->peran) {
             PeranPengguna::AdminPusat => 'layouts.admin-pusat',
             PeranPengguna::AdminCabang => 'layouts.admin-cabang',
+            PeranPengguna::Guru => 'layouts.guru',
             default => 'layouts.app',
         };
     }
