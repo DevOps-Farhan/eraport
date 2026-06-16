@@ -96,4 +96,28 @@ class TahunAjaran extends Model
     {
         return $this->semester->firstWhere('jenis', JenisSemester::Genap);
     }
+
+    /**
+     * @return HasMany<Kelas, $this>
+     */
+    public function kelas(): HasMany
+    {
+        return $this->hasMany(Kelas::class, 'tahun_ajaran_id');
+    }
+
+    /**
+     * @return HasMany<RombelSiswa, $this>
+     */
+    public function rombelSiswa(): HasMany
+    {
+        return $this->hasMany(RombelSiswa::class, 'tahun_ajaran_id');
+    }
+
+    /**
+     * @return HasMany<PenugasanMengajar, $this>
+     */
+    public function penugasanMengajar(): HasMany
+    {
+        return $this->hasMany(PenugasanMengajar::class, 'tahun_ajaran_id');
+    }
 }

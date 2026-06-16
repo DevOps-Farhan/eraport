@@ -48,4 +48,28 @@ class CabangSekolah extends Model
     {
         return $this->hasMany(TahunAjaran::class, 'cabang_sekolah_id');
     }
+
+    /**
+     * @return HasMany<Jurusan, $this>
+     */
+    public function jurusan(): HasMany
+    {
+        return $this->hasMany(Jurusan::class, 'cabang_sekolah_id');
+    }
+
+    /**
+     * @return HasMany<MataPelajaran, $this>
+     */
+    public function mataPelajaran(): HasMany
+    {
+        return $this->hasMany(MataPelajaran::class, 'cabang_sekolah_id');
+    }
+
+    /**
+     * @return HasMany<Siswa, $this>
+     */
+    public function siswa(): HasMany
+    {
+        return $this->hasMany(Siswa::class, 'cabang_sekolah_id');
+    }
 }

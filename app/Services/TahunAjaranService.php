@@ -6,6 +6,8 @@ use App\Enums\AksiLogAkademik;
 use App\Enums\JenisSemester;
 use App\Enums\StatusSemester;
 use App\Enums\StatusTahunAjaran;
+use App\Models\PenugasanMengajar;
+use App\Models\RombelSiswa;
 use App\Models\Semester;
 use App\Models\TahunAjaran;
 use Illuminate\Support\Facades\DB;
@@ -319,11 +321,13 @@ class TahunAjaranService
         );
     }
 
-    /**
-     * Placeholder: akan diperluas saat modul nilai tersedia.
-     */
     public function memilikiDataSemester(Semester $semester): bool
     {
-        return false;
+        return RombelSiswa::query()
+                ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
+                ->exists()
+            || PenugasanMengajar::query()
+                ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
+                ->exists();
     }
 }

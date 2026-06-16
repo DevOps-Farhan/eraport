@@ -52,11 +52,11 @@
 
             <div class="ml-4 mt-1 space-y-1 border-l border-slate-200 pl-3">
                 @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.tahun-ajaran.index', 'label' => 'Tahun Ajaran'])
-                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.jurusan', 'label' => 'Jurusan'])
-                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.kelas', 'label' => 'Kelas'])
-                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.mata-pelajaran', 'label' => 'Mata Pelajaran'])
+                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.jurusan.index', 'label' => 'Jurusan'])
+                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.kelas.index', 'label' => 'Kelas'])
+                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.mata-pelajaran.index', 'label' => 'Mata Pelajaran'])
                 @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.ekstrakurikuler', 'label' => 'Ekstrakurikuler'])
-                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.penugasan-mengajar', 'label' => 'Penugasan Mengajar'])
+                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.penugasan-mengajar.index', 'label' => 'Penugasan Mengajar'])
             </div>
         </details>
 
@@ -86,7 +86,7 @@
             <div class="ml-4 mt-1 space-y-1 border-l border-slate-200 pl-3">
                 @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.master-data.guru', 'label' => 'Guru'])
                 @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.master-data.pembina', 'label' => 'Pembina Ekstrakurikuler'])
-                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.master-data.siswa', 'label' => 'Siswa'])
+                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.master-data.siswa.index', 'label' => 'Siswa'])
             </div>
         </details>
 

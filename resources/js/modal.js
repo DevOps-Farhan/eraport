@@ -22,6 +22,96 @@ const jenisSemesterLabels = {
     genap: 'Genap',
 };
 
+const kelompokMapelLabels = {
+    umum: 'Umum',
+    kejuruan: 'Kejuruan',
+    muatan_lokal: 'Muatan Lokal',
+};
+
+const jenisKelaminLabels = {
+    L: 'Laki-laki',
+    P: 'Perempuan',
+};
+
+const setFormValue = (prefix, field, value) => {
+    const element = document.getElementById(`${prefix}-${field}`);
+    if (element) {
+        element.value = value ?? '';
+    }
+};
+
+const setAktifField = (prefix, aktif) => {
+    const aktifCheckbox = document.getElementById(`${prefix}-aktif`);
+    if (aktifCheckbox && aktifCheckbox.type === 'checkbox') {
+        aktifCheckbox.checked = Boolean(aktif);
+    } else if (aktifCheckbox) {
+        aktifCheckbox.value = aktif ? 'Aktif' : 'Nonaktif';
+    }
+};
+
+export const fillJurusanForm = (prefix, jurusan) => {
+    setFormValue(prefix, 'kode', jurusan.kode);
+    setFormValue(prefix, 'nama', jurusan.nama);
+    setAktifField(prefix, jurusan.aktif);
+};
+
+export const fillMataPelajaranForm = (prefix, mapel) => {
+    setFormValue(prefix, 'kode', mapel.kode);
+    setFormValue(prefix, 'nama', mapel.nama);
+    setAktifField(prefix, mapel.aktif);
+
+    const kelompokSelect = document.getElementById(`${prefix}-kelompok`);
+    if (kelompokSelect && kelompokSelect.tagName === 'SELECT') {
+        kelompokSelect.value = mapel.kelompok ?? '';
+    } else if (kelompokSelect) {
+        kelompokSelect.value = kelompokMapelLabels[mapel.kelompok] ?? mapel.kelompok;
+    }
+};
+
+export const fillKelasForm = (prefix, kelas) => {
+    setFormValue(prefix, 'nama', kelas.nama);
+    setFormValue(prefix, 'jurusan_nama', kelas.jurusan?.nama ?? '—');
+    setFormValue(prefix, 'wali_kelas_nama', kelas.wali_kelas?.nama ?? '—');
+
+    const jurusanSelect = document.getElementById(`${prefix}-jurusan_id`);
+    if (jurusanSelect) {
+        jurusanSelect.value = kelas.jurusan_id ?? '';
+    }
+
+    const tingkatSelect = document.getElementById(`${prefix}-tingkat`);
+    if (tingkatSelect && tingkatSelect.tagName === 'SELECT') {
+        tingkatSelect.value = kelas.tingkat ?? '';
+    } else if (tingkatSelect) {
+        tingkatSelect.value = kelas.tingkat ?? '';
+    }
+
+    const waliSelect = document.getElementById(`${prefix}-wali_kelas_id`);
+    if (waliSelect) {
+        waliSelect.value = kelas.wali_kelas_id ?? '';
+    }
+};
+
+export const fillSiswaForm = (prefix, siswa) => {
+    setFormValue(prefix, 'nis', siswa.nis);
+    setFormValue(prefix, 'nisn', siswa.nisn);
+    setFormValue(prefix, 'nama', siswa.nama);
+    setFormValue(prefix, 'tanggal_lahir', siswa.tanggal_lahir?.substring(0, 10));
+    setAktifField(prefix, siswa.aktif);
+
+    const jkSelect = document.getElementById(`${prefix}-jenis_kelamin`);
+    if (jkSelect && jkSelect.tagName === 'SELECT') {
+        jkSelect.value = siswa.jenis_kelamin ?? '';
+    } else if (jkSelect) {
+        jkSelect.value = jenisKelaminLabels[siswa.jenis_kelamin] ?? siswa.jenis_kelamin;
+    }
+
+    const kelasSaatIni = document.getElementById(`${prefix}-kelas_saat_ini`);
+    if (kelasSaatIni) {
+        const rombel = siswa.rombel_siswa?.[0];
+        kelasSaatIni.value = rombel?.kelas?.nama ?? '—';
+    }
+};
+
 export const fillTahunAjaranForm = (prefix, tahunAjaran) => {
     const setValue = (field, value) => {
         const element = document.getElementById(`${prefix}-${field}`);
@@ -227,6 +317,55 @@ export const openModal = (modalId, data = null, tipe = null) => {
                 namaLabel.textContent = data.nama;
             }
         }
+
+        if (modalId === 'modal-edit-jurusan') {
+            document.getElementById('form-edit-jurusan').action = `/admin-cabang/data-akademik/jurusan/${data.id}`;
+            fillJurusanForm('edit', data);
+        }
+        if (modalId === 'modal-detail-jurusan') fillJurusanForm('detail', data);
+        if (modalId === 'modal-hapus-jurusan') {
+            document.getElementById('form-hapus-jurusan').action = `/admin-cabang/data-akademik/jurusan/${data.id}`;
+            document.getElementById('hapus-jurusan-nama').textContent = data.nama;
+        }
+
+        if (modalId === 'modal-edit-mata-pelajaran') {
+            document.getElementById('form-edit-mata-pelajaran').action = `/admin-cabang/data-akademik/mata-pelajaran/${data.id}`;
+            fillMataPelajaranForm('edit', data);
+        }
+        if (modalId === 'modal-detail-mata-pelajaran') fillMataPelajaranForm('detail', data);
+        if (modalId === 'modal-hapus-mata-pelajaran') {
+            document.getElementById('form-hapus-mata-pelajaran').action = `/admin-cabang/data-akademik/mata-pelajaran/${data.id}`;
+            document.getElementById('hapus-mata-pelajaran-nama').textContent = data.nama;
+        }
+
+        if (modalId === 'modal-edit-kelas') {
+            document.getElementById('form-edit-kelas').action = `/admin-cabang/data-akademik/kelas/${data.id}`;
+            fillKelasForm('edit', data);
+        }
+        if (modalId === 'modal-detail-kelas') fillKelasForm('detail', data);
+        if (modalId === 'modal-hapus-kelas') {
+            document.getElementById('form-hapus-kelas').action = `/admin-cabang/data-akademik/kelas/${data.id}`;
+            document.getElementById('hapus-kelas-nama').textContent = data.nama;
+        }
+
+        if (modalId === 'modal-edit-siswa') {
+            document.getElementById('form-edit-siswa').action = `/admin-cabang/master-data/siswa/${data.id}`;
+            fillSiswaForm('edit', data);
+        }
+        if (modalId === 'modal-detail-siswa') fillSiswaForm('detail', data);
+        if (modalId === 'modal-hapus-siswa') {
+            document.getElementById('form-hapus-siswa').action = `/admin-cabang/master-data/siswa/${data.id}`;
+            document.getElementById('hapus-siswa-nama').textContent = data.nama;
+        }
+        if (modalId === 'modal-rombel-siswa') {
+            document.getElementById('form-rombel-siswa').action = `/admin-cabang/master-data/siswa/${data.id}/rombel`;
+            document.getElementById('rombel-siswa-nama').textContent = data.nama;
+            const rombel = data.rombel_siswa?.[0];
+            const kelasSelect = document.getElementById('rombel-kelas_id');
+            if (kelasSelect && rombel) {
+                kelasSelect.value = rombel.kelas_id ?? '';
+            }
+        }
     }
 
     if (modalId === 'modal-konfirmasi-tahun-ajaran' && data) {
@@ -268,6 +407,22 @@ export const initModals = () => {
 
             if (trigger.dataset.konfirmasi) {
                 data = JSON.parse(trigger.dataset.konfirmasi);
+            }
+
+            if (trigger.dataset.jurusan) {
+                data = JSON.parse(trigger.dataset.jurusan);
+            }
+
+            if (trigger.dataset.mataPelajaran) {
+                data = JSON.parse(trigger.dataset.mataPelajaran);
+            }
+
+            if (trigger.dataset.kelas) {
+                data = JSON.parse(trigger.dataset.kelas);
+            }
+
+            if (trigger.dataset.siswa) {
+                data = JSON.parse(trigger.dataset.siswa);
             }
 
             openModal(modalId, data, tipe);

@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminCabang\JurusanController;
+use App\Http\Controllers\AdminCabang\KelasController;
+use App\Http\Controllers\AdminCabang\MataPelajaranController;
+use App\Http\Controllers\AdminCabang\PenugasanMengajarController;
+use App\Http\Controllers\AdminCabang\SiswaController;
 use App\Http\Controllers\AdminCabang\TahunAjaranController;
 use App\Http\Controllers\ArsipTahunAjaranController;
 use App\Http\Controllers\AdminPusat\CabangSekolahController;
@@ -94,30 +99,29 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::post('/tahun-ajaran/{tahun_ajaran}/buka-kembali-genap', [TahunAjaranController::class, 'bukaKembaliGenap'])->name('tahun-ajaran.buka-kembali-genap');
                 Route::post('/tahun-ajaran/{tahun_ajaran}/buka-kembali', [TahunAjaranController::class, 'bukaKembali'])->name('tahun-ajaran.buka-kembali');
 
-                Route::view('/jurusan', 'admin-cabang.placeholder', [
-                    'judul' => 'Jurusan',
-                    'deskripsi' => 'Kelola data jurusan atau program keahlian di cabang sekolah.',
-                ])->name('jurusan');
+                Route::get('/jurusan', [JurusanController::class, 'index'])->name('jurusan.index');
+                Route::post('/jurusan', [JurusanController::class, 'store'])->name('jurusan.store');
+                Route::put('/jurusan/{jurusan}', [JurusanController::class, 'update'])->name('jurusan.update');
+                Route::delete('/jurusan/{jurusan}', [JurusanController::class, 'destroy'])->name('jurusan.destroy');
 
-                Route::view('/kelas', 'admin-cabang.placeholder', [
-                    'judul' => 'Kelas',
-                    'deskripsi' => 'Kelola data kelas per jurusan dan tingkat.',
-                ])->name('kelas');
+                Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');
+                Route::post('/kelas', [KelasController::class, 'store'])->name('kelas.store');
+                Route::put('/kelas/{kelas}', [KelasController::class, 'update'])->name('kelas.update');
+                Route::delete('/kelas/{kelas}', [KelasController::class, 'destroy'])->name('kelas.destroy');
 
-                Route::view('/mata-pelajaran', 'admin-cabang.placeholder', [
-                    'judul' => 'Mata Pelajaran',
-                    'deskripsi' => 'Kelola daftar mata pelajaran yang diajarkan di cabang sekolah.',
-                ])->name('mata-pelajaran');
+                Route::get('/mata-pelajaran', [MataPelajaranController::class, 'index'])->name('mata-pelajaran.index');
+                Route::post('/mata-pelajaran', [MataPelajaranController::class, 'store'])->name('mata-pelajaran.store');
+                Route::put('/mata-pelajaran/{mata_pelajaran}', [MataPelajaranController::class, 'update'])->name('mata-pelajaran.update');
+                Route::delete('/mata-pelajaran/{mata_pelajaran}', [MataPelajaranController::class, 'destroy'])->name('mata-pelajaran.destroy');
 
                 Route::view('/ekstrakurikuler', 'admin-cabang.placeholder', [
                     'judul' => 'Ekstrakurikuler',
                     'deskripsi' => 'Kelola kegiatan ekstrakurikuler yang tersedia di cabang sekolah.',
                 ])->name('ekstrakurikuler');
 
-                Route::view('/penugasan-mengajar', 'admin-cabang.placeholder', [
-                    'judul' => 'Penugasan Mengajar',
-                    'deskripsi' => 'Atur penugasan guru ke mata pelajaran dan kelas.',
-                ])->name('penugasan-mengajar');
+                Route::get('/penugasan-mengajar', [PenugasanMengajarController::class, 'index'])->name('penugasan-mengajar.index');
+                Route::post('/penugasan-mengajar', [PenugasanMengajarController::class, 'store'])->name('penugasan-mengajar.store');
+                Route::delete('/penugasan-mengajar/{penugasan_mengajar}', [PenugasanMengajarController::class, 'destroy'])->name('penugasan-mengajar.destroy');
             });
 
             Route::prefix('master-data')->name('master-data.')->group(function () {
@@ -131,10 +135,11 @@ Route::middleware(['auth', 'active'])->group(function () {
                     'deskripsi' => 'Kelola data pembina ekstrakurikuler di cabang sekolah Anda.',
                 ])->name('pembina');
 
-                Route::view('/siswa', 'admin-cabang.placeholder', [
-                    'judul' => 'Siswa',
-                    'deskripsi' => 'Kelola data siswa di cabang sekolah Anda.',
-                ])->name('siswa');
+                Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index');
+                Route::post('/siswa', [SiswaController::class, 'store'])->name('siswa.store');
+                Route::put('/siswa/{siswa}', [SiswaController::class, 'update'])->name('siswa.update');
+                Route::delete('/siswa/{siswa}', [SiswaController::class, 'destroy'])->name('siswa.destroy');
+                Route::post('/siswa/{siswa}/rombel', [SiswaController::class, 'assignRombel'])->name('siswa.rombel');
             });
         });
 

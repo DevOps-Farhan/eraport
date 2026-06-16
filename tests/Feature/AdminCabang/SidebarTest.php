@@ -54,7 +54,7 @@ class SidebarTest extends TestCase
     {
         $guru = User::factory()->guru()->create();
 
-        $response = $this->actingAs($guru)->get(route('admin-cabang.data-akademik.kelas'));
+        $response = $this->actingAs($guru)->get(route('admin-cabang.data-akademik.kelas.index'));
 
         $response->assertForbidden();
     }
