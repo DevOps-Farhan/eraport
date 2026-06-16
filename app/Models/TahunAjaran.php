@@ -120,4 +120,12 @@ class TahunAjaran extends Model
     {
         return $this->hasMany(PenugasanMengajar::class, 'tahun_ajaran_id');
     }
+
+    /**
+     * @return HasMany<PenugasanPembina, $this>
+     */
+    public function penugasanPembina(): HasMany
+    {
+        return $this->hasMany(PenugasanPembina::class, 'tahun_ajaran_id');
+    }
 }

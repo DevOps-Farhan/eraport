@@ -328,6 +328,28 @@ export const openModal = (modalId, data = null, tipe = null) => {
             document.getElementById('hapus-jurusan-nama').textContent = data.nama;
         }
 
+        if (modalId === 'modal-edit-ekstrakurikuler') {
+            document.getElementById('form-edit-ekstrakurikuler').action = `/admin-cabang/data-akademik/ekstrakurikuler/${data.id}`;
+            fillJurusanForm('edit', data);
+        }
+        if (modalId === 'modal-detail-ekstrakurikuler') fillJurusanForm('detail', data);
+        if (modalId === 'modal-hapus-ekstrakurikuler') {
+            document.getElementById('form-hapus-ekstrakurikuler').action = `/admin-cabang/data-akademik/ekstrakurikuler/${data.id}`;
+            document.getElementById('hapus-ekstrakurikuler-nama').textContent = data.nama;
+        }
+
+        if (modalId === 'modal-edit-pengguna-cabang' && tipe) {
+            document.getElementById('form-edit-pengguna-cabang').action = `/admin-cabang/master-data/${tipe}/${data.id}`;
+            fillPenggunaForm('edit', data);
+        }
+        if (modalId === 'modal-detail-pengguna-cabang') {
+            fillPenggunaForm('detail', data);
+        }
+        if (modalId === 'modal-hapus-pengguna-cabang' && tipe) {
+            document.getElementById('form-hapus-pengguna-cabang').action = `/admin-cabang/master-data/${tipe}/${data.id}`;
+            document.getElementById('hapus-pengguna-cabang-nama').textContent = data.nama;
+        }
+
         if (modalId === 'modal-edit-mata-pelajaran') {
             document.getElementById('form-edit-mata-pelajaran').action = `/admin-cabang/data-akademik/mata-pelajaran/${data.id}`;
             fillMataPelajaranForm('edit', data);
@@ -423,6 +445,14 @@ export const initModals = () => {
 
             if (trigger.dataset.siswa) {
                 data = JSON.parse(trigger.dataset.siswa);
+            }
+
+            if (trigger.dataset.ekstrakurikuler) {
+                data = JSON.parse(trigger.dataset.ekstrakurikuler);
+            }
+
+            if (trigger.dataset.penggunaCabang) {
+                data = JSON.parse(trigger.dataset.penggunaCabang);
             }
 
             openModal(modalId, data, tipe);

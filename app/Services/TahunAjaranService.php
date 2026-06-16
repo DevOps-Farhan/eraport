@@ -7,6 +7,7 @@ use App\Enums\JenisSemester;
 use App\Enums\StatusSemester;
 use App\Enums\StatusTahunAjaran;
 use App\Models\PenugasanMengajar;
+use App\Models\PenugasanPembina;
 use App\Models\RombelSiswa;
 use App\Models\Semester;
 use App\Models\TahunAjaran;
@@ -327,6 +328,9 @@ class TahunAjaranService
                 ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
                 ->exists()
             || PenugasanMengajar::query()
+                ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
+                ->exists()
+            || PenugasanPembina::query()
                 ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
                 ->exists();
     }

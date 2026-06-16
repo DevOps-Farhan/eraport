@@ -72,4 +72,12 @@ class CabangSekolah extends Model
     {
         return $this->hasMany(Siswa::class, 'cabang_sekolah_id');
     }
+
+    /**
+     * @return HasMany<Ekstrakurikuler, $this>
+     */
+    public function ekstrakurikuler(): HasMany
+    {
+        return $this->hasMany(Ekstrakurikuler::class, 'cabang_sekolah_id');
+    }
 }

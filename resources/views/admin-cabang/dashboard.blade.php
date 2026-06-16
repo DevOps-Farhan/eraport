@@ -27,7 +27,7 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 class="text-sm font-medium text-slate-500">Master Data</h2>
             <p class="mt-2 text-sm text-slate-600">Kelola data guru, pembina ekstrakurikuler, dan siswa di cabang Anda.</p>
-            <a href="{{ route('admin-cabang.master-data.guru') }}" class="mt-4 inline-flex text-sm font-medium text-emerald-600 hover:text-emerald-700">
+            <a href="{{ route('admin-cabang.master-data.guru.index') }}" class="mt-4 inline-flex text-sm font-medium text-emerald-600 hover:text-emerald-700">
                 Buka master data →
             </a>
         </div>

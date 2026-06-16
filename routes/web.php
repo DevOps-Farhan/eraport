@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\AdminCabang\EkstrakurikulerController;
 use App\Http\Controllers\AdminCabang\JurusanController;
 use App\Http\Controllers\AdminCabang\KelasController;
 use App\Http\Controllers\AdminCabang\MataPelajaranController;
 use App\Http\Controllers\AdminCabang\PenugasanMengajarController;
+use App\Http\Controllers\AdminCabang\PenggunaCabangController;
 use App\Http\Controllers\AdminCabang\SiswaController;
 use App\Http\Controllers\AdminCabang\TahunAjaranController;
 use App\Http\Controllers\ArsipTahunAjaranController;
@@ -114,10 +116,12 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::put('/mata-pelajaran/{mata_pelajaran}', [MataPelajaranController::class, 'update'])->name('mata-pelajaran.update');
                 Route::delete('/mata-pelajaran/{mata_pelajaran}', [MataPelajaranController::class, 'destroy'])->name('mata-pelajaran.destroy');
 
-                Route::view('/ekstrakurikuler', 'admin-cabang.placeholder', [
-                    'judul' => 'Ekstrakurikuler',
-                    'deskripsi' => 'Kelola kegiatan ekstrakurikuler yang tersedia di cabang sekolah.',
-                ])->name('ekstrakurikuler');
+                Route::get('/ekstrakurikuler', [EkstrakurikulerController::class, 'index'])->name('ekstrakurikuler.index');
+                Route::post('/ekstrakurikuler', [EkstrakurikulerController::class, 'store'])->name('ekstrakurikuler.store');
+                Route::put('/ekstrakurikuler/{ekstrakurikuler}', [EkstrakurikulerController::class, 'update'])->name('ekstrakurikuler.update');
+                Route::delete('/ekstrakurikuler/{ekstrakurikuler}', [EkstrakurikulerController::class, 'destroy'])->name('ekstrakurikuler.destroy');
+                Route::post('/ekstrakurikuler/penugasan-pembina', [EkstrakurikulerController::class, 'storePenugasan'])->name('ekstrakurikuler.penugasan.store');
+                Route::delete('/ekstrakurikuler/penugasan-pembina/{penugasan_pembina}', [EkstrakurikulerController::class, 'destroyPenugasan'])->name('ekstrakurikuler.penugasan.destroy');
 
                 Route::get('/penugasan-mengajar', [PenugasanMengajarController::class, 'index'])->name('penugasan-mengajar.index');
                 Route::post('/penugasan-mengajar', [PenugasanMengajarController::class, 'store'])->name('penugasan-mengajar.store');
@@ -125,15 +129,27 @@ Route::middleware(['auth', 'active'])->group(function () {
             });
 
             Route::prefix('master-data')->name('master-data.')->group(function () {
-                Route::view('/guru', 'admin-cabang.placeholder', [
-                    'judul' => 'Guru',
-                    'deskripsi' => 'Kelola data guru di cabang sekolah Anda.',
-                ])->name('guru');
+                Route::get('/guru', [PenggunaCabangController::class, 'guru'])->name('guru.index');
+                Route::post('/guru', [PenggunaCabangController::class, 'store'])
+                    ->defaults('tipe', 'guru')
+                    ->name('guru.store');
+                Route::put('/guru/{pengguna}', [PenggunaCabangController::class, 'update'])
+                    ->defaults('tipe', 'guru')
+                    ->name('guru.update');
+                Route::delete('/guru/{pengguna}', [PenggunaCabangController::class, 'destroy'])
+                    ->defaults('tipe', 'guru')
+                    ->name('guru.destroy');
 
-                Route::view('/pembina', 'admin-cabang.placeholder', [
-                    'judul' => 'Pembina Ekstrakurikuler',
-                    'deskripsi' => 'Kelola data pembina ekstrakurikuler di cabang sekolah Anda.',
-                ])->name('pembina');
+                Route::get('/pembina', [PenggunaCabangController::class, 'pembina'])->name('pembina.index');
+                Route::post('/pembina', [PenggunaCabangController::class, 'store'])
+                    ->defaults('tipe', 'pembina')
+                    ->name('pembina.store');
+                Route::put('/pembina/{pengguna}', [PenggunaCabangController::class, 'update'])
+                    ->defaults('tipe', 'pembina')
+                    ->name('pembina.update');
+                Route::delete('/pembina/{pengguna}', [PenggunaCabangController::class, 'destroy'])
+                    ->defaults('tipe', 'pembina')
+                    ->name('pembina.destroy');
 
                 Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index');
                 Route::post('/siswa', [SiswaController::class, 'store'])->name('siswa.store');
