@@ -4,15 +4,21 @@ use App\Http\Controllers\AdminCabang\EkstrakurikulerController;
 use App\Http\Controllers\AdminCabang\JurusanController;
 use App\Http\Controllers\AdminCabang\KelasController;
 use App\Http\Controllers\AdminCabang\MataPelajaranController;
-use App\Http\Controllers\AdminCabang\PenugasanMengajarController;
 use App\Http\Controllers\AdminCabang\PenggunaCabangController;
+use App\Http\Controllers\AdminCabang\PenugasanMengajarController;
 use App\Http\Controllers\AdminCabang\SiswaController;
 use App\Http\Controllers\AdminCabang\TahunAjaranController;
-use App\Http\Controllers\ArsipTahunAjaranController;
 use App\Http\Controllers\AdminPusat\CabangSekolahController;
 use App\Http\Controllers\AdminPusat\DashboardController;
 use App\Http\Controllers\AdminPusat\PenggunaController;
+use App\Http\Controllers\ArsipTahunAjaranController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Guru\NilaiTpController;
+use App\Http\Controllers\Guru\NilaiUjianController;
+use App\Http\Controllers\Guru\TujuanPembelajaranController;
+use App\Http\Controllers\Guru\WaliKelas\AbsensiCatatanController;
+use App\Http\Controllers\Guru\WaliKelas\KelasController as WaliKelasController;
+use App\Http\Controllers\Guru\WaliKelas\LegerRaportController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -166,37 +172,31 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::view('/', 'guru.dashboard')->name('dashboard');
 
             Route::prefix('kelola-nilai')->name('kelola-nilai.')->group(function () {
-                Route::view('/tujuan-pembelajaran', 'guru.placeholder', [
-                    'judul' => 'Tujuan Pembelajaran',
-                    'deskripsi' => 'Kelola tujuan pembelajaran untuk mata pelajaran yang Anda ampu.',
-                ])->name('tujuan-pembelajaran');
+                Route::get('/tujuan-pembelajaran', [TujuanPembelajaranController::class, 'index'])->name('tujuan-pembelajaran');
+                Route::post('/tujuan-pembelajaran', [TujuanPembelajaranController::class, 'store'])->name('tujuan-pembelajaran.store');
+                Route::put('/tujuan-pembelajaran/{tujuan_pembelajaran}', [TujuanPembelajaranController::class, 'update'])->name('tujuan-pembelajaran.update');
+                Route::delete('/tujuan-pembelajaran/{tujuan_pembelajaran}', [TujuanPembelajaranController::class, 'destroy'])->name('tujuan-pembelajaran.destroy');
 
-                Route::view('/input-nilai-tp', 'guru.placeholder', [
-                    'judul' => 'Input Nilai Tujuan Pembelajaran',
-                    'deskripsi' => 'Input nilai capaian tujuan pembelajaran per siswa.',
-                ])->name('input-nilai-tp');
+                Route::get('/input-nilai-tp', [NilaiTpController::class, 'index'])->name('input-nilai-tp');
+                Route::get('/input-nilai-tp/{penugasan}', [NilaiTpController::class, 'show'])->name('input-nilai-tp.show');
+                Route::post('/input-nilai-tp/{penugasan}', [NilaiTpController::class, 'store'])->name('input-nilai-tp.store');
 
-                Route::view('/nilai-ujian', 'guru.placeholder', [
-                    'judul' => 'Nilai Ujian',
-                    'deskripsi' => 'Input dan kelola nilai ujian mata pelajaran.',
-                ])->name('nilai-ujian');
+                Route::get('/nilai-ujian', [NilaiUjianController::class, 'index'])->name('nilai-ujian');
+                Route::get('/nilai-ujian/{penugasan}', [NilaiUjianController::class, 'show'])->name('nilai-ujian.show');
+                Route::post('/nilai-ujian/{penugasan}', [NilaiUjianController::class, 'store'])->name('nilai-ujian.store');
             });
 
             Route::prefix('wali-kelas')->name('wali-kelas.')->group(function () {
-                Route::view('/kelas', 'guru.placeholder', [
-                    'judul' => 'Kelola Data Kelas sebagai Wali',
-                    'deskripsi' => 'Kelola data siswa dan informasi kelas yang Anda wali.',
-                ])->name('kelas');
+                Route::get('/kelas', [WaliKelasController::class, 'index'])->name('kelas');
+                Route::post('/kelas/siswa', [WaliKelasController::class, 'storeSiswa'])->name('kelas.store-siswa');
+                Route::put('/kelas/siswa/{siswa}', [WaliKelasController::class, 'updateSiswa'])->name('kelas.update-siswa');
+                Route::delete('/kelas/siswa/{siswa}', [WaliKelasController::class, 'destroySiswa'])->name('kelas.destroy-siswa');
 
-                Route::view('/absensi-catatan', 'guru.placeholder', [
-                    'judul' => 'Rekap Absensi dan Catatan',
-                    'deskripsi' => 'Rekap kehadiran siswa dan catatan wali kelas.',
-                ])->name('absensi-catatan');
+                Route::get('/absensi-catatan', [AbsensiCatatanController::class, 'index'])->name('absensi-catatan');
+                Route::post('/absensi-catatan', [AbsensiCatatanController::class, 'store'])->name('absensi-catatan.store');
 
-                Route::view('/leger-raport', 'guru.placeholder', [
-                    'judul' => 'Leger & Cetak Raport',
-                    'deskripsi' => 'Lihat leger nilai dan cetak raport siswa.',
-                ])->name('leger-raport');
+                Route::get('/leger-raport', [LegerRaportController::class, 'index'])->name('leger-raport');
+                Route::get('/leger-raport/{siswa}/cetak', [LegerRaportController::class, 'cetak'])->name('leger-raport.cetak');
             });
         });
 

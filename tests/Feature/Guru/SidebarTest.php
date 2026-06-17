@@ -50,7 +50,7 @@ class SidebarTest extends TestCase
         $response->assertSee('Leger & Cetak Raport');
     }
 
-    public function test_halaman_placeholder_dapat_diakses(): void
+    public function test_halaman_kelola_nilai_dapat_diakses(): void
     {
         $guru = User::factory()->guru()->create();
 
@@ -58,7 +58,6 @@ class SidebarTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Nilai Ujian');
-        $response->assertSee('Halaman dalam pengembangan');
     }
 
     public function test_guru_nonaktif_tidak_dapat_akses_menu(): void

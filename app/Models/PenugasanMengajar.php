@@ -6,6 +6,7 @@ use Database\Factories\PenugasanMengajarFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PenugasanMengajar extends Model
 {
@@ -51,5 +52,21 @@ class PenugasanMengajar extends Model
     public function kelas(): BelongsTo
     {
         return $this->belongsTo(Kelas::class, 'kelas_id');
+    }
+
+    /**
+     * @return HasMany<TujuanPembelajaran, $this>
+     */
+    public function tujuanPembelajaran(): HasMany
+    {
+        return $this->hasMany(TujuanPembelajaran::class, 'penugasan_mengajar_id');
+    }
+
+    /**
+     * @return HasMany<NilaiUjian, $this>
+     */
+    public function nilaiUjian(): HasMany
+    {
+        return $this->hasMany(NilaiUjian::class, 'penugasan_mengajar_id');
     }
 }

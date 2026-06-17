@@ -6,6 +6,10 @@ use App\Enums\AksiLogAkademik;
 use App\Enums\JenisSemester;
 use App\Enums\StatusSemester;
 use App\Enums\StatusTahunAjaran;
+use App\Models\AbsensiSiswa;
+use App\Models\CatatanWaliKelas;
+use App\Models\NilaiTujuanPembelajaran;
+use App\Models\NilaiUjian;
 use App\Models\PenugasanMengajar;
 use App\Models\PenugasanPembina;
 use App\Models\RombelSiswa;
@@ -325,13 +329,25 @@ class TahunAjaranService
     public function memilikiDataSemester(Semester $semester): bool
     {
         return RombelSiswa::query()
-                ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
-                ->exists()
+            ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
+            ->exists()
             || PenugasanMengajar::query()
                 ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
                 ->exists()
             || PenugasanPembina::query()
                 ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
+                ->exists()
+            || NilaiTujuanPembelajaran::query()
+                ->where('semester_id', $semester->id)
+                ->exists()
+            || NilaiUjian::query()
+                ->where('semester_id', $semester->id)
+                ->exists()
+            || AbsensiSiswa::query()
+                ->where('semester_id', $semester->id)
+                ->exists()
+            || CatatanWaliKelas::query()
+                ->where('semester_id', $semester->id)
                 ->exists();
     }
 }
