@@ -9,6 +9,7 @@ enum AksiLogAkademik: string
     case TahunAjaranDihapus = 'tahun_ajaran_dihapus';
     case TahunAjaranDiaktifkan = 'tahun_ajaran_diaktifkan';
     case SemesterGenapDimulai = 'semester_genap_dimulai';
+    case SemesterGenapDilanjutkan = 'semester_genap_dilanjutkan';
     case SemesterGenapDiakhiri = 'semester_genap_diakhiri';
     case TahunAjaranDitutup = 'tahun_ajaran_ditutup';
     case DikembalikanKeGanjil = 'dikembalikan_ke_ganjil';
@@ -23,6 +24,7 @@ enum AksiLogAkademik: string
             self::TahunAjaranDihapus => 'Tahun ajaran dihapus',
             self::TahunAjaranDiaktifkan => 'Tahun ajaran diaktifkan',
             self::SemesterGenapDimulai => 'Semester genap dimulai',
+            self::SemesterGenapDilanjutkan => 'Semester genap dilanjutkan',
             self::SemesterGenapDiakhiri => 'Semester genap diakhiri',
             self::TahunAjaranDitutup => 'Tahun ajaran ditutup',
             self::DikembalikanKeGanjil => 'Dikembalikan ke semester ganjil',

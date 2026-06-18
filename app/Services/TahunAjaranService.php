@@ -88,29 +88,36 @@ class TahunAjaranService
             ]);
         }
 
-        if (! $genap || $genap->status !== StatusSemester::BelumDimulai) {
+        if (! $genap || ! in_array($genap->status, [StatusSemester::BelumDimulai, StatusSemester::Ditangguhkan], true)) {
             throw ValidationException::withMessages([
                 'semester' => 'Semester genap tidak siap dimulai.',
             ]);
         }
 
-        DB::transaction(function () use ($ganjil, $genap) {
+        $melanjutkan = $genap->status === StatusSemester::Ditangguhkan;
+
+        DB::transaction(function () use ($ganjil, $genap, $melanjutkan) {
             $ganjil->update([
                 'status' => StatusSemester::Selesai,
                 'tanggal_selesai' => now()->toDateString(),
             ]);
 
-            $genap->update([
-                'status' => StatusSemester::Berjalan,
-                'tanggal_mulai' => now()->toDateString(),
-            ]);
+            $genapUpdate = ['status' => StatusSemester::Berjalan];
+
+            if (! $melanjutkan) {
+                $genapUpdate['tanggal_mulai'] = now()->toDateString();
+            }
+
+            $genap->update($genapUpdate);
         });
 
         $this->logAkademikService->catat(
             $tahunAjaran->cabang_sekolah_id,
-            AksiLogAkademik::SemesterGenapDimulai,
+            $melanjutkan ? AksiLogAkademik::SemesterGenapDilanjutkan : AksiLogAkademik::SemesterGenapDimulai,
             $tahunAjaran->id,
-            "Semester genap {$tahunAjaran->nama} dimulai.",
+            $melanjutkan
+                ? "Semester genap {$tahunAjaran->nama} dilanjutkan."
+                : "Semester genap {$tahunAjaran->nama} dimulai.",
         );
     }
 
@@ -201,17 +208,17 @@ class TahunAjaranService
             ]);
         }
 
-        if ($this->memilikiDataSemester($genap)) {
-            throw ValidationException::withMessages([
-                'semester' => 'Semester genap sudah memiliki data akademik dan tidak dapat dibatalkan.',
-            ]);
-        }
+        $genapDitangguhkan = $this->memilikiDataSemester($genap);
 
-        DB::transaction(function () use ($ganjil, $genap) {
-            $genap->update([
-                'status' => StatusSemester::BelumDimulai,
-                'tanggal_mulai' => null,
-            ]);
+        DB::transaction(function () use ($ganjil, $genap, $genapDitangguhkan) {
+            if ($genapDitangguhkan) {
+                $genap->update(['status' => StatusSemester::Ditangguhkan]);
+            } else {
+                $genap->update([
+                    'status' => StatusSemester::BelumDimulai,
+                    'tanggal_mulai' => null,
+                ]);
+            }
 
             $ganjil->update([
                 'status' => StatusSemester::Berjalan,
@@ -219,11 +226,15 @@ class TahunAjaranService
             ]);
         });
 
+        $pesanLog = $genapDitangguhkan
+            ? "Kembali ke semester ganjil {$tahunAjaran->nama}. Semester genap ditangguhkan, data tetap tersimpan."
+            : "Semester genap {$tahunAjaran->nama} dibatalkan, kembali ke semester ganjil.";
+
         $this->logAkademikService->catat(
             $tahunAjaran->cabang_sekolah_id,
             AksiLogAkademik::DikembalikanKeGanjil,
             $tahunAjaran->id,
-            "Semester genap {$tahunAjaran->nama} dibatalkan, kembali ke semester ganjil.",
+            $pesanLog,
         );
     }
 
@@ -249,12 +260,6 @@ class TahunAjaranService
         if (! $genap || $genap->status !== StatusSemester::Selesai) {
             throw ValidationException::withMessages([
                 'semester' => 'Semester genap harus sudah diakhiri.',
-            ]);
-        }
-
-        if ($this->memilikiDataSemester($genap)) {
-            throw ValidationException::withMessages([
-                'semester' => 'Semester genap sudah memiliki data akademik dan tidak dapat dibuka kembali.',
             ]);
         }
 
@@ -327,20 +332,24 @@ class TahunAjaranService
         );
     }
 
-    public function memilikiDataSemester(Semester $semester): bool
+    public function memilikiDataTahunAjaran(TahunAjaran $tahunAjaran): bool
     {
         return RombelSiswa::query()
-            ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
+            ->where('tahun_ajaran_id', $tahunAjaran->id)
             ->exists()
             || PenugasanMengajar::query()
-                ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
+                ->where('tahun_ajaran_id', $tahunAjaran->id)
                 ->exists()
             || PenugasanPembina::query()
-                ->where('tahun_ajaran_id', $semester->tahun_ajaran_id)
-                ->exists()
-            || NilaiTujuanPembelajaran::query()
-                ->where('semester_id', $semester->id)
-                ->exists()
+                ->where('tahun_ajaran_id', $tahunAjaran->id)
+                ->exists();
+    }
+
+    public function memilikiDataSemester(Semester $semester): bool
+    {
+        return NilaiTujuanPembelajaran::query()
+            ->where('semester_id', $semester->id)
+            ->exists()
             || NilaiUjian::query()
                 ->where('semester_id', $semester->id)
                 ->exists()

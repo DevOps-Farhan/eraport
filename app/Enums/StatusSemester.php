@@ -6,6 +6,7 @@ enum StatusSemester: string
 {
     case BelumDimulai = 'belum_dimulai';
     case Berjalan = 'berjalan';
+    case Ditangguhkan = 'ditangguhkan';
     case Selesai = 'selesai';
 
     public function label(): string
@@ -13,6 +14,7 @@ enum StatusSemester: string
         return match ($this) {
             self::BelumDimulai => 'Belum Dimulai',
             self::Berjalan => 'Berjalan',
+            self::Ditangguhkan => 'Ditangguhkan',
             self::Selesai => 'Selesai',
         };
     }

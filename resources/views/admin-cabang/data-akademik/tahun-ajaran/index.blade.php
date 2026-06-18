@@ -52,10 +52,24 @@
                                 @else
                                     <div class="space-y-1">
                                         @if ($ganjil)
-                                            <p>Ganjil: <span class="font-medium">{{ $ganjil->status->label() }}</span></p>
+                                            <p>Ganjil:
+                                                <span @class([
+                                                    'font-medium',
+                                                    'text-emerald-700' => $ganjil->status === \App\Enums\StatusSemester::Berjalan,
+                                                    'text-slate-600' => $ganjil->status === \App\Enums\StatusSemester::Selesai,
+                                                ])>{{ $ganjil->status->label() }}</span>
+                                            </p>
                                         @endif
                                         @if ($genap)
-                                            <p>Genap: <span class="font-medium">{{ $genap->status->label() }}</span></p>
+                                            <p>Genap:
+                                                <span @class([
+                                                    'font-medium',
+                                                    'text-emerald-700' => $genap->status === \App\Enums\StatusSemester::Berjalan,
+                                                    'text-violet-700' => $genap->status === \App\Enums\StatusSemester::Ditangguhkan,
+                                                    'text-slate-600' => $genap->status === \App\Enums\StatusSemester::Selesai,
+                                                    'text-slate-400' => $genap->status === \App\Enums\StatusSemester::BelumDimulai,
+                                                ])>{{ $genap->status->label() }}</span>
+                                            </p>
                                         @endif
                                     </div>
                                 @endif
@@ -100,7 +114,7 @@
                                     @endif
 
                                     @if ($item->isAktif())
-                                        @if ($ganjil?->status === \App\Enums\StatusSemester::Berjalan)
+                                        @if ($ganjil?->status === \App\Enums\StatusSemester::Berjalan && $genap?->status === \App\Enums\StatusSemester::BelumDimulai)
                                             @include('admin-cabang.data-akademik.tahun-ajaran._tombol-konfirmasi', [
                                                 'action' => route('admin-cabang.data-akademik.tahun-ajaran.pindah-genap', $item),
                                                 'judul' => 'Mulai Semester Genap',
@@ -108,6 +122,17 @@
                                                 'submitLabel' => 'Ya, Mulai Genap',
                                                 'submitClass' => 'bg-blue-600 hover:bg-blue-700',
                                                 'label' => 'Mulai Genap',
+                                                'buttonClass' => 'rounded-lg px-2.5 py-1.5 font-medium text-blue-700 transition hover:bg-blue-50',
+                                            ])
+                                        @endif
+                                        @if ($ganjil?->status === \App\Enums\StatusSemester::Berjalan && $genap?->status === \App\Enums\StatusSemester::Ditangguhkan)
+                                            @include('admin-cabang.data-akademik.tahun-ajaran._tombol-konfirmasi', [
+                                                'action' => route('admin-cabang.data-akademik.tahun-ajaran.pindah-genap', $item),
+                                                'judul' => 'Lanjutkan Semester Genap',
+                                                'pesan' => "Semester ganjil akan ditutup dan semester genap {$item->nama} dilanjutkan. Data genap yang sudah ada tetap tersimpan.",
+                                                'submitLabel' => 'Ya, Lanjutkan Genap',
+                                                'submitClass' => 'bg-blue-600 hover:bg-blue-700',
+                                                'label' => 'Lanjutkan Genap',
                                                 'buttonClass' => 'rounded-lg px-2.5 py-1.5 font-medium text-blue-700 transition hover:bg-blue-50',
                                             ])
                                         @endif
@@ -124,7 +149,7 @@
                                             @include('admin-cabang.data-akademik.tahun-ajaran._tombol-konfirmasi', [
                                                 'action' => route('admin-cabang.data-akademik.tahun-ajaran.kembalikan-ganjil', $item),
                                                 'judul' => 'Kembalikan ke Semester Ganjil',
-                                                'pesan' => "Semester genap akan dibatalkan dan semester ganjil {$item->nama} dibuka kembali. Hanya tersedia jika belum ada data akademik di genap.",
+                                                'pesan' => "Konteks akan kembali ke semester ganjil {$item->nama}. Data semester genap tidak dihapus dan dapat dilanjutkan nanti.",
                                                 'submitLabel' => 'Ya, Kembalikan',
                                                 'submitClass' => 'bg-violet-600 hover:bg-violet-700',
                                                 'label' => 'Batalkan Genap',

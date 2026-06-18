@@ -203,7 +203,7 @@ class TahunAjaranController extends Controller
 
         return redirect()
             ->route('admin-cabang.data-akademik.tahun-ajaran.index')
-            ->with('sukses', 'Berhasil dikembalikan ke semester ganjil.');
+            ->with('sukses', 'Berhasil dikembalikan ke semester ganjil. Data semester genap tetap tersimpan.');
     }
 
     public function bukaKembaliGenap(TahunAjaran $tahunAjaran): RedirectResponse

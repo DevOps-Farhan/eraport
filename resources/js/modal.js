@@ -14,6 +14,7 @@ const statusTahunAjaranLabels = {
 const statusSemesterLabels = {
     belum_dimulai: 'Belum Dimulai',
     berjalan: 'Berjalan',
+    ditangguhkan: 'Ditangguhkan',
     selesai: 'Selesai',
 };
 
