@@ -19,10 +19,10 @@ class TujuanPembelajaranController extends Controller
     public function index(Request $request): View
     {
         $penugasanList = $this->penugasanGuru();
-        $penugasanId = $request->integer('penugasan') ?: $penugasanList->first()?->id;
-        $penugasanAktif = $penugasanId
-            ? $penugasanList->firstWhere('id', $penugasanId)
-            : null;
+        $penugasanKey = $request->query('penugasan');
+        $penugasanAktif = $penugasanKey
+            ? $penugasanList->first(fn (PenugasanMengajar $item) => $item->getRouteKey() === $penugasanKey)
+            : $penugasanList->first();
 
         $tujuanPembelajaran = collect();
 
@@ -60,7 +60,7 @@ class TujuanPembelajaranController extends Controller
         ]);
 
         return redirect()
-            ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $penugasan->id])
+            ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $penugasan->getRouteKey()])
             ->with('sukses', 'Tujuan pembelajaran berhasil ditambahkan.');
     }
 
@@ -79,7 +79,7 @@ class TujuanPembelajaranController extends Controller
         ]);
 
         return redirect()
-            ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $tujuanPembelajaran->penugasan_mengajar_id])
+            ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $tujuanPembelajaran->penugasanMengajar->getRouteKey()])
             ->with('sukses', 'Tujuan pembelajaran berhasil diperbarui.');
     }
 
@@ -90,18 +90,18 @@ class TujuanPembelajaranController extends Controller
         }
 
         $tujuanPembelajaran = $this->pastikanTujuanPembelajaranGuru($tujuanPembelajaran);
-        $penugasanId = $tujuanPembelajaran->penugasan_mengajar_id;
+        $penugasanKey = $tujuanPembelajaran->penugasanMengajar->getRouteKey();
 
         if ($tujuanPembelajaran->nilaiTujuanPembelajaran()->exists()) {
             return redirect()
-                ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $penugasanId])
+                ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $penugasanKey])
                 ->with('gagal', 'Tujuan pembelajaran tidak dapat dihapus karena sudah memiliki nilai.');
         }
 
         $tujuanPembelajaran->delete();
 
         return redirect()
-            ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $penugasanId])
+            ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $penugasanKey])
             ->with('sukses', 'Tujuan pembelajaran berhasil dihapus.');
     }
 }

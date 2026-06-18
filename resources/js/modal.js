@@ -252,7 +252,7 @@ export const openModal = (modalId, data = null, tipe = null) => {
         if (modalId === 'modal-edit-cabang') {
             const form = document.getElementById('form-edit-cabang');
             if (form) {
-                form.action = `/admin-pusat/cabang-sekolah/${data.id}`;
+                form.action = `/admin-pusat/cabang-sekolah/${data.route_key}`;
             }
             fillCabangForm('edit', data);
         }
@@ -265,7 +265,7 @@ export const openModal = (modalId, data = null, tipe = null) => {
             const form = document.getElementById('form-hapus-cabang');
             const namaLabel = document.getElementById('hapus-cabang-nama');
             if (form) {
-                form.action = `/admin-pusat/cabang-sekolah/${data.id}`;
+                form.action = `/admin-pusat/cabang-sekolah/${data.route_key}`;
             }
             if (namaLabel) {
                 namaLabel.textContent = data.nama;
@@ -275,7 +275,7 @@ export const openModal = (modalId, data = null, tipe = null) => {
         if (modalId === 'modal-edit-pengguna') {
             const form = document.getElementById('form-edit-pengguna');
             if (form && tipe) {
-                form.action = `/admin-pusat/pengguna/${tipe}/${data.id}`;
+                form.action = `/admin-pusat/pengguna/${tipe}/${data.route_key}`;
             }
             fillPenggunaForm('edit', data);
         }
@@ -288,7 +288,7 @@ export const openModal = (modalId, data = null, tipe = null) => {
             const form = document.getElementById('form-hapus-pengguna');
             const namaLabel = document.getElementById('hapus-pengguna-nama');
             if (form && tipe) {
-                form.action = `/admin-pusat/pengguna/${tipe}/${data.id}`;
+                form.action = `/admin-pusat/pengguna/${tipe}/${data.route_key}`;
             }
             if (namaLabel) {
                 namaLabel.textContent = data.nama;
@@ -298,7 +298,7 @@ export const openModal = (modalId, data = null, tipe = null) => {
         if (modalId === 'modal-edit-tahun-ajaran') {
             const form = document.getElementById('form-edit-tahun-ajaran');
             if (form) {
-                form.action = `/admin-cabang/data-akademik/tahun-ajaran/${data.id}`;
+                form.action = `/admin-cabang/data-akademik/tahun-ajaran/${data.route_key}`;
             }
             fillTahunAjaranForm('edit', data);
         }
@@ -311,7 +311,7 @@ export const openModal = (modalId, data = null, tipe = null) => {
             const form = document.getElementById('form-hapus-tahun-ajaran');
             const namaLabel = document.getElementById('hapus-tahun-ajaran-nama');
             if (form) {
-                form.action = `/admin-cabang/data-akademik/tahun-ajaran/${data.id}`;
+                form.action = `/admin-cabang/data-akademik/tahun-ajaran/${data.route_key}`;
             }
             if (namaLabel) {
                 namaLabel.textContent = data.nama;
@@ -319,68 +319,68 @@ export const openModal = (modalId, data = null, tipe = null) => {
         }
 
         if (modalId === 'modal-edit-jurusan') {
-            document.getElementById('form-edit-jurusan').action = `/admin-cabang/data-akademik/jurusan/${data.id}`;
+            document.getElementById('form-edit-jurusan').action = `/admin-cabang/data-akademik/jurusan/${data.route_key}`;
             fillJurusanForm('edit', data);
         }
         if (modalId === 'modal-detail-jurusan') fillJurusanForm('detail', data);
         if (modalId === 'modal-hapus-jurusan') {
-            document.getElementById('form-hapus-jurusan').action = `/admin-cabang/data-akademik/jurusan/${data.id}`;
+            document.getElementById('form-hapus-jurusan').action = `/admin-cabang/data-akademik/jurusan/${data.route_key}`;
             document.getElementById('hapus-jurusan-nama').textContent = data.nama;
         }
 
         if (modalId === 'modal-edit-ekstrakurikuler') {
-            document.getElementById('form-edit-ekstrakurikuler').action = `/admin-cabang/data-akademik/ekstrakurikuler/${data.id}`;
+            document.getElementById('form-edit-ekstrakurikuler').action = `/admin-cabang/data-akademik/ekstrakurikuler/${data.route_key}`;
             fillJurusanForm('edit', data);
         }
         if (modalId === 'modal-detail-ekstrakurikuler') fillJurusanForm('detail', data);
         if (modalId === 'modal-hapus-ekstrakurikuler') {
-            document.getElementById('form-hapus-ekstrakurikuler').action = `/admin-cabang/data-akademik/ekstrakurikuler/${data.id}`;
+            document.getElementById('form-hapus-ekstrakurikuler').action = `/admin-cabang/data-akademik/ekstrakurikuler/${data.route_key}`;
             document.getElementById('hapus-ekstrakurikuler-nama').textContent = data.nama;
         }
 
         if (modalId === 'modal-edit-pengguna-cabang' && tipe) {
-            document.getElementById('form-edit-pengguna-cabang').action = `/admin-cabang/master-data/${tipe}/${data.id}`;
+            document.getElementById('form-edit-pengguna-cabang').action = `/admin-cabang/master-data/${tipe}/${data.route_key}`;
             fillPenggunaForm('edit', data);
         }
         if (modalId === 'modal-detail-pengguna-cabang') {
             fillPenggunaForm('detail', data);
         }
         if (modalId === 'modal-hapus-pengguna-cabang' && tipe) {
-            document.getElementById('form-hapus-pengguna-cabang').action = `/admin-cabang/master-data/${tipe}/${data.id}`;
+            document.getElementById('form-hapus-pengguna-cabang').action = `/admin-cabang/master-data/${tipe}/${data.route_key}`;
             document.getElementById('hapus-pengguna-cabang-nama').textContent = data.nama;
         }
 
         if (modalId === 'modal-edit-mata-pelajaran') {
-            document.getElementById('form-edit-mata-pelajaran').action = `/admin-cabang/data-akademik/mata-pelajaran/${data.id}`;
+            document.getElementById('form-edit-mata-pelajaran').action = `/admin-cabang/data-akademik/mata-pelajaran/${data.route_key}`;
             fillMataPelajaranForm('edit', data);
         }
         if (modalId === 'modal-detail-mata-pelajaran') fillMataPelajaranForm('detail', data);
         if (modalId === 'modal-hapus-mata-pelajaran') {
-            document.getElementById('form-hapus-mata-pelajaran').action = `/admin-cabang/data-akademik/mata-pelajaran/${data.id}`;
+            document.getElementById('form-hapus-mata-pelajaran').action = `/admin-cabang/data-akademik/mata-pelajaran/${data.route_key}`;
             document.getElementById('hapus-mata-pelajaran-nama').textContent = data.nama;
         }
 
         if (modalId === 'modal-edit-kelas') {
-            document.getElementById('form-edit-kelas').action = `/admin-cabang/data-akademik/kelas/${data.id}`;
+            document.getElementById('form-edit-kelas').action = `/admin-cabang/data-akademik/kelas/${data.route_key}`;
             fillKelasForm('edit', data);
         }
         if (modalId === 'modal-detail-kelas') fillKelasForm('detail', data);
         if (modalId === 'modal-hapus-kelas') {
-            document.getElementById('form-hapus-kelas').action = `/admin-cabang/data-akademik/kelas/${data.id}`;
+            document.getElementById('form-hapus-kelas').action = `/admin-cabang/data-akademik/kelas/${data.route_key}`;
             document.getElementById('hapus-kelas-nama').textContent = data.nama;
         }
 
         if (modalId === 'modal-edit-siswa') {
-            document.getElementById('form-edit-siswa').action = `/admin-cabang/master-data/siswa/${data.id}`;
+            document.getElementById('form-edit-siswa').action = `/admin-cabang/master-data/siswa/${data.route_key}`;
             fillSiswaForm('edit', data);
         }
         if (modalId === 'modal-detail-siswa') fillSiswaForm('detail', data);
         if (modalId === 'modal-hapus-siswa') {
-            document.getElementById('form-hapus-siswa').action = `/admin-cabang/master-data/siswa/${data.id}`;
+            document.getElementById('form-hapus-siswa').action = `/admin-cabang/master-data/siswa/${data.route_key}`;
             document.getElementById('hapus-siswa-nama').textContent = data.nama;
         }
         if (modalId === 'modal-rombel-siswa') {
-            document.getElementById('form-rombel-siswa').action = `/admin-cabang/master-data/siswa/${data.id}/rombel`;
+            document.getElementById('form-rombel-siswa').action = `/admin-cabang/master-data/siswa/${data.route_key}/rombel`;
             document.getElementById('rombel-siswa-nama').textContent = data.nama;
             const rombel = data.rombel_siswa?.[0];
             const kelasSelect = document.getElementById('rombel-kelas_id');

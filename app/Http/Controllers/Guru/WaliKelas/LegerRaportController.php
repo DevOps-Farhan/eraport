@@ -7,10 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Guru\Concerns\MenanganiWaliKelas;
 use App\Models\AbsensiSiswa;
 use App\Models\CatatanWaliKelas;
-use App\Models\NilaiTujuanPembelajaran;
+use App\Models\PencapaianTp;
 use App\Models\PenugasanMengajar;
 use App\Models\Siswa;
-use App\Models\TujuanPembelajaran;
 use App\Services\KonteksAkademik;
 use App\Services\NilaiRaportService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -97,22 +96,17 @@ class LegerRaportController extends Controller
         foreach ($penugasanList as $penugasan) {
             $ringkasan = $nilaiRaportService->ringkasanMapel($penugasan, $siswa, $semester);
 
-            $tpIds = TujuanPembelajaran::query()
+            $pencapaian = PencapaianTp::query()
                 ->where('penugasan_mengajar_id', $penugasan->id)
-                ->pluck('id');
-
-            $deskripsiTp = NilaiTujuanPembelajaran::query()
-                ->with('tujuanPembelajaran')
-                ->whereIn('tujuan_pembelajaran_id', $tpIds)
                 ->where('siswa_id', $siswa->id)
                 ->where('semester_id', $semester->id)
-                ->get();
+                ->value('pencapaian');
 
             $nilaiMapel[] = [
                 'mapel' => $penugasan->mataPelajaran,
                 'guru' => $penugasan->guru,
                 'ringkasan' => $ringkasan,
-                'deskripsi_tp' => $deskripsiTp,
+                'pencapaian' => $pencapaian,
             ];
         }
 

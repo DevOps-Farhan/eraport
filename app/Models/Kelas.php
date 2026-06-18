@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\TingkatKelas;
+use App\Models\Concerns\HasEncryptedRouteKey;
 use Database\Factories\KelasFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Kelas extends Model
 {
     /** @use HasFactory<KelasFactory> */
-    use HasFactory;
+    use HasEncryptedRouteKey, HasFactory;
 
     protected $table = 'kelas';
 

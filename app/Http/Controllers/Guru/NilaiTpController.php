@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Guru\Concerns\MenanganiPenugasanGuru;
 use App\Http\Requests\Guru\StoreNilaiTpRequest;
 use App\Models\NilaiTujuanPembelajaran;
+use App\Models\PencapaianTp;
 use App\Models\PenugasanMengajar;
+use App\Models\Semester;
 use App\Models\TujuanPembelajaran;
 use App\Services\DeskripsiPencapaianService;
 use App\Services\NilaiRaportService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class NilaiTpController extends Controller
@@ -38,6 +41,7 @@ class NilaiTpController extends Controller
         $siswaList = $nilaiRaportService->siswaAktifKelas($penugasan);
 
         $nilaiExisting = collect();
+        $pencapaianExisting = collect();
 
         if ($semester && $tujuanPembelajaran->isNotEmpty()) {
             $nilaiExisting = NilaiTujuanPembelajaran::query()
@@ -45,6 +49,13 @@ class NilaiTpController extends Controller
                 ->where('semester_id', $semester->id)
                 ->get()
                 ->keyBy(fn ($item) => $item->siswa_id.'_'.$item->tujuan_pembelajaran_id);
+
+            $pencapaianExisting = PencapaianTp::query()
+                ->where('penugasan_mengajar_id', $penugasan->id)
+                ->where('semester_id', $semester->id)
+                ->whereIn('siswa_id', $siswaList->pluck('id'))
+                ->get()
+                ->keyBy('siswa_id');
         }
 
         return view('guru.kelola-nilai.input-nilai-tp.show', [
@@ -52,6 +63,7 @@ class NilaiTpController extends Controller
             'tujuanPembelajaran' => $tujuanPembelajaran,
             'siswaList' => $siswaList,
             'nilaiExisting' => $nilaiExisting,
+            'pencapaianExisting' => $pencapaianExisting,
             'semester' => $semester,
             'dapatDiedit' => $this->semesterDapatDiedit(),
         ]);
@@ -108,8 +120,50 @@ class NilaiTpController extends Controller
             );
         }
 
+        $this->sinkronkanPencapaian($penugasan, $semester, $tujuanPembelajaran, $deskripsiService);
+
         return redirect()
             ->route('guru.kelola-nilai.input-nilai-tp.show', $penugasan)
             ->with('sukses', 'Nilai tujuan pembelajaran berhasil disimpan.');
+    }
+
+    /**
+     * @param  Collection<int, TujuanPembelajaran>  $tujuanPembelajaran
+     */
+    private function sinkronkanPencapaian(
+        PenugasanMengajar $penugasan,
+        Semester $semester,
+        Collection $tujuanPembelajaran,
+        DeskripsiPencapaianService $deskripsiService,
+    ): void {
+        $tpIds = $tujuanPembelajaran->pluck('id');
+
+        $siswaIds = NilaiTujuanPembelajaran::query()
+            ->whereIn('tujuan_pembelajaran_id', $tpIds)
+            ->where('semester_id', $semester->id)
+            ->distinct()
+            ->pluck('siswa_id');
+
+        foreach ($siswaIds as $siswaId) {
+            $nilaiTp = NilaiTujuanPembelajaran::query()
+                ->with('tujuanPembelajaran')
+                ->whereIn('tujuan_pembelajaran_id', $tpIds)
+                ->where('siswa_id', $siswaId)
+                ->where('semester_id', $semester->id)
+                ->get();
+
+            $pencapaian = $deskripsiService->generatePencapaianRingkas($nilaiTp);
+
+            if ($pencapaian) {
+                PencapaianTp::query()->updateOrCreate(
+                    [
+                        'penugasan_mengajar_id' => $penugasan->id,
+                        'siswa_id' => $siswaId,
+                        'semester_id' => $semester->id,
+                    ],
+                    ['pencapaian' => $pencapaian],
+                );
+            }
+        }
     }
 }

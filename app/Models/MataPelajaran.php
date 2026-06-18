@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\KelompokMataPelajaran;
+use App\Models\Concerns\HasEncryptedRouteKey;
 use Database\Factories\MataPelajaranFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class MataPelajaran extends Model
 {
     /** @use HasFactory<MataPelajaranFactory> */
-    use HasFactory;
+    use HasEncryptedRouteKey, HasFactory;
 
     protected $table = 'mata_pelajaran';
 

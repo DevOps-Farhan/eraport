@@ -22,7 +22,7 @@
             <label class="block text-sm font-medium text-slate-700">Penugasan Mengajar</label>
             <select name="penugasan" onchange="this.form.submit()" class="mt-1 w-full max-w-md rounded-xl border border-slate-300 px-3 py-2 text-sm">
                 @foreach ($penugasanList as $item)
-                    <option value="{{ $item->id }}" @selected($penugasanAktif?->id === $item->id)>
+                    <option value="{{ $item->getRouteKey() }}" @selected($penugasanAktif?->id === $item->id)>
                         {{ $item->mataPelajaran->nama }} — {{ $item->kelas->nama }}
                     </option>
                 @endforeach

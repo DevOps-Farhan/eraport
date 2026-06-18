@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\JenisSemester;
 use App\Enums\StatusSemester;
 use App\Enums\StatusTahunAjaran;
+use App\Models\Concerns\HasEncryptedRouteKey;
 use Database\Factories\TahunAjaranFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class TahunAjaran extends Model
 {
     /** @use HasFactory<TahunAjaranFactory> */
-    use HasFactory;
+    use HasEncryptedRouteKey, HasFactory;
 
     protected $table = 'tahun_ajaran';
 

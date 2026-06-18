@@ -10,6 +10,7 @@ use App\Models\AbsensiSiswa;
 use App\Models\CatatanWaliKelas;
 use App\Models\NilaiTujuanPembelajaran;
 use App\Models\NilaiUjian;
+use App\Models\PencapaianTp;
 use App\Models\PenugasanMengajar;
 use App\Models\PenugasanPembina;
 use App\Models\RombelSiswa;
@@ -347,6 +348,9 @@ class TahunAjaranService
                 ->where('semester_id', $semester->id)
                 ->exists()
             || CatatanWaliKelas::query()
+                ->where('semester_id', $semester->id)
+                ->exists()
+            || PencapaianTp::query()
                 ->where('semester_id', $semester->id)
                 ->exists();
     }

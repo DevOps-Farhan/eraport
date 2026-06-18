@@ -24,7 +24,7 @@ class TujuanPembelajaranTest extends TestCase
             'urutan' => 1,
         ]);
 
-        $response->assertRedirect(route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $data['penugasan']->id]));
+        $response->assertRedirect(route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $data['penugasan']->getRouteKey()]));
         $this->assertDatabaseHas('tujuan_pembelajaran', [
             'penugasan_mengajar_id' => $data['penugasan']->id,
             'kode' => '3.1',

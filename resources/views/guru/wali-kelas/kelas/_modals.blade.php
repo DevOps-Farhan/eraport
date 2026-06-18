@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             const siswa = JSON.parse(btn.dataset.siswa);
             const form = document.querySelector('[data-form-edit-siswa-wali]');
-            form.action = `${baseUrl}/${siswa.id}`;
+            form.action = `${baseUrl}/${siswa.route_key}`;
             form.querySelector('[name=nis]').value = siswa.nis;
             form.querySelector('[name=nisn]').value = siswa.nisn || '';
             form.querySelector('[name=nama]').value = siswa.nama;
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-modal-open="modal-hapus-siswa-wali"]').forEach(btn => {
         btn.addEventListener('click', () => {
             const siswa = JSON.parse(btn.dataset.siswa);
-            document.querySelector('[data-form-hapus-siswa-wali]').action = `${baseUrl}/${siswa.id}`;
+            document.querySelector('[data-form-hapus-siswa-wali]').action = `${baseUrl}/${siswa.route_key}`;
             document.querySelector('[data-siswa-nama]').textContent = siswa.nama;
         });
     });

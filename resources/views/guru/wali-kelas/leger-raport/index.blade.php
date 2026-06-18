@@ -31,7 +31,7 @@
                     <tr>
                         <th class="sticky left-0 z-10 bg-slate-50 px-4 py-3 text-left font-semibold text-slate-500">Siswa</th>
                         @foreach ($penugasanList as $penugasan)
-                            <th class="min-w-[80px] px-3 py-3 text-center font-semibold text-slate-500">{{ $penugasan->mataPelajaran->kode }}</th>
+                            <th class="min-w-[80px] px-3 py-3 text-center font-semibold text-slate-500">{{ $penugasan->mataPelajaran->nama }}</th>
                         @endforeach
                         <th class="px-4 py-3 text-right font-semibold text-slate-500">Aksi</th>
                     </tr>

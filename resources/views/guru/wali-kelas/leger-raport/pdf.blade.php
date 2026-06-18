@@ -56,13 +56,9 @@
 
     <h2>B. Deskripsi Capaian Kompetensi</h2>
     @foreach ($nilaiMapel as $item)
-        @if ($item['deskripsi_tp']->isNotEmpty())
+        @if ($item['pencapaian'])
             <p><strong>{{ $item['mapel']->nama }}</strong></p>
-            <ul>
-                @foreach ($item['deskripsi_tp'] as $ntp)
-                    <li>{{ $ntp->tujuanPembelajaran->kode }}: {{ $ntp->deskripsi_pencapaian }}</li>
-                @endforeach
-            </ul>
+            <p style="white-space:pre-line;margin:0 0 12px;">{{ $item['pencapaian'] }}</p>
         @endif
     @endforeach
 

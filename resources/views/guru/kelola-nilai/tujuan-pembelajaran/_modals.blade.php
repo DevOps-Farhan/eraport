@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             const tp = JSON.parse(btn.dataset.tp);
             const form = document.querySelector('[data-form-edit-tp]');
-            form.action = `${baseUrl}/${tp.id}`;
+            form.action = `${baseUrl}/${tp.route_key}`;
             form.querySelector('[name=kode]').value = tp.kode;
             form.querySelector('[name=deskripsi_kompetensi]').value = tp.deskripsi_kompetensi;
             form.querySelector('[name=urutan]').value = tp.urutan;
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             const tp = JSON.parse(btn.dataset.tp);
             const form = document.querySelector('[data-form-hapus-tp]');
-            form.action = `${baseUrl}/${tp.id}`;
+            form.action = `${baseUrl}/${tp.route_key}`;
             document.querySelector('[data-tp-kode]').textContent = tp.kode;
         });
     });
