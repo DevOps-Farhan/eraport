@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Guru\WaliKelas;
 
 use App\Enums\StatusRombel;
+use App\Http\Controllers\Concerns\MapsAtributSiswa;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Guru\Concerns\MenanganiWaliKelas;
 use App\Http\Requests\Guru\StoreSiswaWaliKelasRequest;
@@ -14,7 +15,7 @@ use Illuminate\View\View;
 
 class KelasController extends Controller
 {
-    use MenanganiWaliKelas;
+    use MapsAtributSiswa, MenanganiWaliKelas;
 
     public function index(): View
     {
@@ -46,11 +47,7 @@ class KelasController extends Controller
 
         $siswa = Siswa::query()->create([
             'cabang_sekolah_id' => $this->cabangSekolahId(),
-            'nis' => $request->string('nis')->value(),
-            'nisn' => $request->string('nisn')->value() ?: null,
-            'nama' => $request->string('nama')->value(),
-            'jenis_kelamin' => $request->string('jenis_kelamin')->value(),
-            'tanggal_lahir' => $request->date('tanggal_lahir'),
+            ...$this->atributSiswaDariRequest($request),
             'aktif' => true,
         ]);
 
@@ -70,13 +67,7 @@ class KelasController extends Controller
     {
         $this->pastikanSiswaDiKelasWali($siswa);
 
-        $siswa->update([
-            'nis' => $request->string('nis')->value(),
-            'nisn' => $request->string('nisn')->value() ?: null,
-            'nama' => $request->string('nama')->value(),
-            'jenis_kelamin' => $request->string('jenis_kelamin')->value(),
-            'tanggal_lahir' => $request->date('tanggal_lahir'),
-        ]);
+        $siswa->update($this->atributSiswaDariRequest($request));
 
         return redirect()
             ->route('guru.wali-kelas.kelas')

@@ -33,6 +33,37 @@ const jenisKelaminLabels = {
     P: 'Perempuan',
 };
 
+const agamaLabels = {
+    islam: 'Islam',
+    kristen: 'Kristen',
+    katolik: 'Katolik',
+    hindu: 'Hindu',
+    buddha: 'Buddha',
+    konghucu: 'Konghucu',
+    lainnya: 'Lainnya',
+};
+
+const siswaProfilFields = [
+    'nis',
+    'nisn',
+    'nama',
+    'tempat_lahir',
+    'status_dalam_keluarga',
+    'alamat',
+    'kecamatan',
+    'kabupaten_kota',
+    'nama_ayah',
+    'nama_ibu',
+    'alamat_orang_tua',
+    'nomor_telepon_rumah',
+    'pekerjaan_ayah',
+    'pekerjaan_ibu',
+    'nama_wali_siswa',
+    'alamat_wali_siswa',
+    'nomor_telepon_wali_siswa',
+    'pekerjaan_wali_siswa',
+];
+
 const setFormValue = (prefix, field, value) => {
     const element = document.getElementById(`${prefix}-${field}`);
     if (element) {
@@ -92,22 +123,48 @@ export const fillKelasForm = (prefix, kelas) => {
 };
 
 export const fillSiswaForm = (prefix, siswa) => {
-    setFormValue(prefix, 'nis', siswa.nis);
-    setFormValue(prefix, 'nisn', siswa.nisn);
-    setFormValue(prefix, 'nama', siswa.nama);
-    setFormValue(prefix, 'tanggal_lahir', siswa.tanggal_lahir?.substring(0, 10));
+    const isReadonly = document.getElementById(`${prefix}-nis`)?.readOnly;
+    const display = (value) => {
+        if (!isReadonly) {
+            return value ?? '';
+        }
+
+        return value === null || value === undefined || value === '' ? '—' : value;
+    };
+
+    siswaProfilFields.forEach((field) => {
+        setFormValue(prefix, field, display(siswa[field]));
+    });
+
+    setFormValue(prefix, 'tanggal_lahir', isReadonly
+        ? (siswa.tanggal_lahir ? siswa.tanggal_lahir.substring(0, 10) : '—')
+        : (siswa.tanggal_lahir?.substring(0, 10) ?? ''));
+    setFormValue(prefix, 'anak_ke', isReadonly
+        ? (siswa.anak_ke ?? '—')
+        : (siswa.anak_ke ?? ''));
     setAktifField(prefix, siswa.aktif);
 
     const jkSelect = document.getElementById(`${prefix}-jenis_kelamin`);
     if (jkSelect && jkSelect.tagName === 'SELECT') {
         jkSelect.value = siswa.jenis_kelamin ?? '';
     } else if (jkSelect) {
-        jkSelect.value = jenisKelaminLabels[siswa.jenis_kelamin] ?? siswa.jenis_kelamin;
+        jkSelect.value = siswa.jenis_kelamin
+            ? (jenisKelaminLabels[siswa.jenis_kelamin] ?? siswa.jenis_kelamin)
+            : '—';
+    }
+
+    const agamaField = document.getElementById(`${prefix}-agama`);
+    if (agamaField && agamaField.tagName === 'SELECT') {
+        agamaField.value = siswa.agama ?? '';
+    } else if (agamaField) {
+        agamaField.value = siswa.agama
+            ? (agamaLabels[siswa.agama] ?? siswa.agama)
+            : '—';
     }
 
     const kelasSaatIni = document.getElementById(`${prefix}-kelas_saat_ini`);
     if (kelasSaatIni) {
-        const rombel = siswa.rombel_siswa?.[0];
+        const rombel = siswa.rombel_siswa?.[0] ?? siswa.rombelSiswa?.[0];
         kelasSaatIni.value = rombel?.kelas?.nama ?? '—';
     }
 };
@@ -386,6 +443,24 @@ export const openModal = (modalId, data = null, tipe = null) => {
             const kelasSelect = document.getElementById('rombel-kelas_id');
             if (kelasSelect && rombel) {
                 kelasSelect.value = rombel.kelas_id ?? '';
+            }
+        }
+
+        if (modalId === 'modal-edit-siswa-wali') {
+            const form = document.querySelector('[data-form-edit-siswa-wali]');
+            if (form) {
+                form.action = `/guru/wali-kelas/kelas/siswa/${data.route_key}`;
+            }
+            fillSiswaForm('wali-edit', data);
+        }
+        if (modalId === 'modal-hapus-siswa-wali') {
+            const form = document.querySelector('[data-form-hapus-siswa-wali]');
+            const namaLabel = document.querySelector('[data-siswa-nama]');
+            if (form) {
+                form.action = `/guru/wali-kelas/kelas/siswa/${data.route_key}`;
+            }
+            if (namaLabel) {
+                namaLabel.textContent = data.nama;
             }
         }
     }

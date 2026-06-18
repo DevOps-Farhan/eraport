@@ -1,12 +1,14 @@
 <div id="modal-tambah-siswa" class="modal hidden" aria-hidden="true">
     <div class="modal-backdrop fixed inset-0 z-40 bg-slate-900/50" data-modal-close></div>
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="w-full max-w-lg rounded-2xl bg-white shadow-xl">
-            <div class="border-b px-6 py-4"><h2 class="text-lg font-semibold">Tambah Siswa</h2></div>
-            <form method="POST" action="{{ route('admin-cabang.master-data.siswa.store') }}" class="px-6 py-4">
+        <div class="flex max-h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-white shadow-xl">
+            <div class="shrink-0 border-b px-6 py-4"><h2 class="text-lg font-semibold">Tambah Siswa</h2></div>
+            <form method="POST" action="{{ route('admin-cabang.master-data.siswa.store') }}" class="flex min-h-0 flex-1 flex-col">
                 @csrf
-                @include('admin-cabang.master-data.siswa._form-fields', ['prefix' => 'tambah'])
-                <div class="mt-6 flex justify-end gap-3 border-t pt-4">
+                <div class="flex-1 overflow-y-auto px-6 py-4">
+                    @include('admin-cabang.master-data.siswa._form-fields', ['prefix' => 'tambah'])
+                </div>
+                <div class="flex shrink-0 justify-end gap-3 border-t px-6 py-4">
                     <button type="button" data-modal-close class="rounded-xl border px-4 py-2 text-sm">Batal</button>
                     <button type="submit" class="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">Simpan</button>
                 </div>
@@ -17,12 +19,14 @@
 <div id="modal-edit-siswa" class="modal hidden" aria-hidden="true">
     <div class="modal-backdrop fixed inset-0 z-40 bg-slate-900/50" data-modal-close></div>
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="w-full max-w-lg rounded-2xl bg-white shadow-xl">
-            <div class="border-b px-6 py-4"><h2 class="text-lg font-semibold">Edit Siswa</h2></div>
-            <form id="form-edit-siswa" method="POST" action="" class="px-6 py-4">
+        <div class="flex max-h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-white shadow-xl">
+            <div class="shrink-0 border-b px-6 py-4"><h2 class="text-lg font-semibold">Edit Siswa</h2></div>
+            <form id="form-edit-siswa" method="POST" action="" class="flex min-h-0 flex-1 flex-col">
                 @csrf @method('PUT')
-                @include('admin-cabang.master-data.siswa._form-fields', ['prefix' => 'edit'])
-                <div class="mt-6 flex justify-end gap-3 border-t pt-4">
+                <div class="flex-1 overflow-y-auto px-6 py-4">
+                    @include('admin-cabang.master-data.siswa._form-fields', ['prefix' => 'edit'])
+                </div>
+                <div class="flex shrink-0 justify-end gap-3 border-t px-6 py-4">
                     <button type="button" data-modal-close class="rounded-xl border px-4 py-2 text-sm">Batal</button>
                     <button type="submit" class="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">Perbarui</button>
                 </div>
@@ -33,11 +37,15 @@
 <div id="modal-detail-siswa" class="modal hidden" aria-hidden="true">
     <div class="modal-backdrop fixed inset-0 z-40 bg-slate-900/50" data-modal-close></div>
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="w-full max-w-lg rounded-2xl bg-white shadow-xl">
-            <div class="border-b px-6 py-4"><h2 class="text-lg font-semibold">Detail Siswa</h2></div>
-            <div class="px-6 py-4">
-                @include('admin-cabang.master-data.siswa._form-fields', ['prefix' => 'detail', 'readonly' => true])
-                <div class="mt-6 flex justify-end border-t pt-4"><button type="button" data-modal-close class="rounded-xl border px-4 py-2 text-sm">Tutup</button></div>
+        <div class="flex max-h-[90vh] w-full max-w-4xl flex-col rounded-2xl bg-white shadow-xl">
+            <div class="shrink-0 border-b px-6 py-4"><h2 class="text-lg font-semibold">Detail Siswa</h2></div>
+            <div class="flex min-h-0 flex-1 flex-col">
+                <div class="flex-1 overflow-y-auto px-6 py-4">
+                    @include('admin-cabang.master-data.siswa._form-fields', ['prefix' => 'detail', 'readonly' => true])
+                </div>
+                <div class="flex shrink-0 justify-end border-t px-6 py-4">
+                    <button type="button" data-modal-close class="rounded-xl border px-4 py-2 text-sm">Tutup</button>
+                </div>
             </div>
         </div>
     </div>

@@ -2,12 +2,13 @@
 
 namespace App\Http\Requests\Guru;
 
-use App\Enums\JenisKelamin;
+use App\Http\Requests\Concerns\RulesProfilSiswa;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreSiswaWaliKelasRequest extends FormRequest
 {
+    use RulesProfilSiswa;
+
     public function authorize(): bool
     {
         return $this->user()?->isGuru() ?? false;
@@ -18,19 +19,19 @@ class StoreSiswaWaliKelasRequest extends FormRequest
      */
     public function rules(): array
     {
-        $cabangId = $this->user()->cabang_sekolah_id;
+        return $this->rulesProfilSiswa($this->user()->cabang_sekolah_id);
+    }
 
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
         return [
-            'nis' => [
-                'required',
-                'string',
-                'max:30',
-                Rule::unique('siswa', 'nis')->where('cabang_sekolah_id', $cabangId),
-            ],
-            'nisn' => ['nullable', 'string', 'max:30'],
-            'nama' => ['required', 'string', 'max:100'],
-            'jenis_kelamin' => ['required', Rule::enum(JenisKelamin::class)],
-            'tanggal_lahir' => ['nullable', 'date'],
+            'nis.required' => 'NIS wajib diisi.',
+            'nis.unique' => 'NIS sudah terdaftar di cabang ini.',
+            'nisn.required' => 'NISN wajib diisi.',
+            'nama.required' => 'Nama siswa wajib diisi.',
         ];
     }
 }

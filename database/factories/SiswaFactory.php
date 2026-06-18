@@ -22,7 +22,7 @@ class SiswaFactory extends Factory
         return [
             'cabang_sekolah_id' => CabangSekolah::factory(),
             'nis' => fake()->unique()->numerify('####'),
-            'nisn' => fake()->optional()->numerify('##########'),
+            'nisn' => fake()->numerify('##########'),
             'nama' => fake()->name(),
             'jenis_kelamin' => fake()->randomElement(JenisKelamin::cases()),
             'tanggal_lahir' => fake()->optional()->date(),

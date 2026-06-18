@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminCabang;
 
 use App\Enums\StatusRombel;
 use App\Http\Controllers\AdminCabang\Concerns\MenanganiScopeCabang;
+use App\Http\Controllers\Concerns\MapsAtributSiswa;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminCabang\AssignRombelSiswaRequest;
 use App\Http\Requests\AdminCabang\StoreSiswaRequest;
@@ -16,7 +17,7 @@ use Illuminate\View\View;
 
 class SiswaController extends Controller
 {
-    use MenanganiScopeCabang;
+    use MapsAtributSiswa, MenanganiScopeCabang;
 
     public function index(): View
     {
@@ -51,12 +52,7 @@ class SiswaController extends Controller
     {
         Siswa::query()->create([
             'cabang_sekolah_id' => $this->cabangSekolahId(),
-            'nis' => $request->string('nis')->value(),
-            'nisn' => $request->string('nisn')->value() ?: null,
-            'nama' => $request->string('nama')->value(),
-            'jenis_kelamin' => $request->string('jenis_kelamin')->value(),
-            'tanggal_lahir' => $request->date('tanggal_lahir'),
-            'aktif' => $request->boolean('aktif', true),
+            ...$this->atributSiswaDariRequest($request, includeAktif: true),
         ]);
 
         return redirect()
@@ -68,14 +64,7 @@ class SiswaController extends Controller
     {
         $this->pastikanMilikCabang($siswa);
 
-        $siswa->update([
-            'nis' => $request->string('nis')->value(),
-            'nisn' => $request->string('nisn')->value() ?: null,
-            'nama' => $request->string('nama')->value(),
-            'jenis_kelamin' => $request->string('jenis_kelamin')->value(),
-            'tanggal_lahir' => $request->date('tanggal_lahir'),
-            'aktif' => $request->boolean('aktif', false),
-        ]);
+        $siswa->update($this->atributSiswaDariRequest($request, includeAktif: true));
 
         return redirect()
             ->route('admin-cabang.master-data.siswa.index')

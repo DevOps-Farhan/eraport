@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Agama;
 use App\Enums\JenisKelamin;
 use App\Models\Concerns\HasEncryptedRouteKey;
 use Database\Factories\SiswaFactory;
@@ -24,6 +25,23 @@ class Siswa extends Model
         'nama',
         'jenis_kelamin',
         'tanggal_lahir',
+        'tempat_lahir',
+        'agama',
+        'status_dalam_keluarga',
+        'anak_ke',
+        'alamat',
+        'kecamatan',
+        'kabupaten_kota',
+        'nama_ayah',
+        'nama_ibu',
+        'alamat_orang_tua',
+        'nomor_telepon_rumah',
+        'pekerjaan_ayah',
+        'pekerjaan_ibu',
+        'nama_wali_siswa',
+        'alamat_wali_siswa',
+        'nomor_telepon_wali_siswa',
+        'pekerjaan_wali_siswa',
         'aktif',
     ];
 
@@ -35,6 +53,8 @@ class Siswa extends Model
         return [
             'jenis_kelamin' => JenisKelamin::class,
             'tanggal_lahir' => 'date',
+            'agama' => Agama::class,
+            'anak_ke' => 'integer',
             'aktif' => 'boolean',
         ];
     }

@@ -113,6 +113,7 @@ class Fase1MasterDataTest extends TestCase
 
         $store = $this->actingAs($admin)->post(route('admin-cabang.master-data.siswa.store'), [
             'nis' => '2026001',
+            'nisn' => '9988776655',
             'nama' => 'Budi Santoso',
             'jenis_kelamin' => JenisKelamin::LakiLaki->value,
         ]);

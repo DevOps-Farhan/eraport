@@ -30,6 +30,7 @@ class WaliKelasTest extends TestCase
 
         $response = $this->actingAs($data['guru'])->post(route('guru.wali-kelas.kelas.store-siswa'), [
             'nis' => '12345',
+            'nisn' => '1122334455',
             'nama' => 'Siswa Baru',
             'jenis_kelamin' => JenisKelamin::LakiLaki->value,
         ]);
