@@ -8,10 +8,36 @@
             <h1 class="text-2xl font-semibold text-slate-900">Siswa</h1>
             <p class="mt-1 text-sm text-slate-500">Kelola data siswa dan penempatan kelas (rombel) tahun ajaran aktif.</p>
         </div>
-        <button type="button" data-modal-open="modal-tambah-siswa" class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">+ Tambah Siswa</button>
+        <div class="flex flex-wrap gap-2">
+            <a
+                href="{{ route('admin-cabang.master-data.siswa.template-csv') }}"
+                class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
+            >
+                Unduh Template CSV
+            </a>
+            <button
+                type="button"
+                data-modal-open="modal-import-siswa"
+                class="inline-flex items-center justify-center rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-800 shadow-sm transition hover:bg-emerald-100"
+            >
+                Import CSV
+            </button>
+            <button type="button" data-modal-open="modal-tambah-siswa" class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">+ Tambah Siswa</button>
+        </div>
     </div>
 
     @include('partials.admin-cabang.banner-tahun-ajaran', ['tahunAjaran' => $tahunAjaran])
+
+    @if (session('import_kesalahan'))
+        <div class="mb-6 max-h-48 overflow-y-auto rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+            <p class="mb-2 font-semibold">Kesalahan import:</p>
+            <ul class="list-inside list-disc space-y-1">
+                @foreach (session('import_kesalahan') as $pesan)
+                    <li>{{ $pesan }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <table class="min-w-full divide-y divide-slate-200">
@@ -31,7 +57,7 @@
                     <tr class="hover:bg-slate-50">
                         <td class="px-4 py-3 text-sm font-medium">{{ $item->nis }}</td>
                         <td class="px-4 py-3 text-sm">{{ $item->nama }}</td>
-                        <td class="px-4 py-3 text-sm">{{ $item->jenis_kelamin->label() }}</td>
+                        <td class="px-4 py-3 text-sm">{{ $item->jenis_kelamin?->label() ?? '—' }}</td>
                         <td class="px-4 py-3 text-sm">{{ $rombel?->kelas?->nama ?? '—' }}</td>
                         <td class="px-4 py-3">@include('partials.badge-aktif', ['aktif' => $item->aktif])</td>
                         <td class="px-4 py-3 text-right text-sm">

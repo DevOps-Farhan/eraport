@@ -158,6 +158,8 @@ Route::middleware(['auth', 'active'])->group(function () {
                     ->name('pembina.destroy');
 
                 Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index');
+                Route::get('/siswa/template-csv', [SiswaController::class, 'unduhTemplateCsv'])->name('siswa.template-csv');
+                Route::post('/siswa/import-csv', [SiswaController::class, 'importCsv'])->name('siswa.import-csv');
                 Route::post('/siswa', [SiswaController::class, 'store'])->name('siswa.store');
                 Route::put('/siswa/{siswa}', [SiswaController::class, 'update'])->name('siswa.update');
                 Route::delete('/siswa/{siswa}', [SiswaController::class, 'destroy'])->name('siswa.destroy');

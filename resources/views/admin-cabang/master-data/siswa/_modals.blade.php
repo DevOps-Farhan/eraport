@@ -92,3 +92,34 @@
     </div>
 </div>
 @endif
+
+<div id="modal-import-siswa" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop fixed inset-0 z-40 bg-slate-900/50" data-modal-close></div>
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="w-full max-w-lg rounded-2xl bg-white shadow-xl">
+            <div class="border-b px-6 py-4"><h2 class="text-lg font-semibold">Import Siswa dari CSV</h2></div>
+            <form method="POST" action="{{ route('admin-cabang.master-data.siswa.import-csv') }}" enctype="multipart/form-data" class="px-6 py-4">
+                @csrf
+                <div class="space-y-4 text-sm text-slate-600">
+                    <p>Unduh template CSV, isi data siswa, lalu unggah file di bawah. Kolom wajib: <strong>nis</strong>, <strong>nisn</strong>, <strong>nama</strong>.</p>
+                    <ul class="list-inside list-disc space-y-1 text-xs">
+                        <li>Baris contoh di template akan diabaikan saat impor.</li>
+                        <li>Jenis kelamin: L atau P (opsional).</li>
+                        <li>Agama: islam, kristen, katolik, hindu, buddha, konghucu, lainnya.</li>
+                        <li>Tanggal lahir format YYYY-MM-DD.</li>
+                        <li>Aktif: 1 atau 0 (default 1).</li>
+                    </ul>
+                    <a href="{{ route('admin-cabang.master-data.siswa.template-csv') }}" class="inline-flex text-emerald-700 font-medium hover:underline">Unduh template-import-siswa.csv</a>
+                </div>
+                <div class="mt-4">
+                    <label for="import-siswa-file" class="mb-1 block text-sm font-medium text-slate-700">File CSV</label>
+                    <input type="file" id="import-siswa-file" name="file" accept=".csv,text/csv" required class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+                </div>
+                <div class="mt-6 flex justify-end gap-3 border-t pt-4">
+                    <button type="button" data-modal-close class="rounded-xl border px-4 py-2 text-sm">Batal</button>
+                    <button type="submit" class="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

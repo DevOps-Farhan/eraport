@@ -7,13 +7,18 @@ use App\Http\Controllers\AdminCabang\Concerns\MenanganiScopeCabang;
 use App\Http\Controllers\Concerns\MapsAtributSiswa;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminCabang\AssignRombelSiswaRequest;
+use App\Http\Requests\AdminCabang\ImportSiswaCsvRequest;
 use App\Http\Requests\AdminCabang\StoreSiswaRequest;
 use App\Http\Requests\AdminCabang\UpdateSiswaRequest;
 use App\Models\Kelas;
 use App\Models\RombelSiswa;
 use App\Models\Siswa;
+use App\Services\ImportSiswaCsvService;
+use App\Support\SiswaCsv;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SiswaController extends Controller
 {
@@ -58,6 +63,43 @@ class SiswaController extends Controller
         return redirect()
             ->route('admin-cabang.master-data.siswa.index')
             ->with('sukses', 'Siswa berhasil ditambahkan.');
+    }
+
+    public function unduhTemplateCsv(ImportSiswaCsvService $importSiswaCsvService): StreamedResponse
+    {
+        $namaFile = SiswaCsv::namaFileTemplate();
+
+        return response()->streamDownload(
+            fn () => print ($importSiswaCsvService->kontenTemplate()),
+            $namaFile,
+            ['Content-Type' => 'text/csv; charset=UTF-8'],
+        );
+    }
+
+    public function importCsv(ImportSiswaCsvRequest $request, ImportSiswaCsvService $importSiswaCsvService): RedirectResponse
+    {
+        try {
+            $hasil = $importSiswaCsvService->impor(
+                $request->file('file')->getPathname(),
+                $this->cabangSekolahId(),
+            );
+        } catch (ValidationException $e) {
+            return redirect()
+                ->route('admin-cabang.master-data.siswa.index')
+                ->withErrors($e->errors())
+                ->with('gagal', collect($e->errors())->flatten()->first());
+        }
+
+        if ($hasil['kesalahan'] !== []) {
+            return redirect()
+                ->route('admin-cabang.master-data.siswa.index')
+                ->with('gagal', 'Import gagal. Perbaiki kesalahan berikut lalu coba lagi.')
+                ->with('import_kesalahan', $hasil['kesalahan']);
+        }
+
+        return redirect()
+            ->route('admin-cabang.master-data.siswa.index')
+            ->with('sukses', "{$hasil['berhasil']} siswa berhasil diimpor.");
     }
 
     public function update(UpdateSiswaRequest $request, Siswa $siswa): RedirectResponse
