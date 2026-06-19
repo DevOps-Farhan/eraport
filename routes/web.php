@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminCabang\KelasController;
 use App\Http\Controllers\AdminCabang\MataPelajaranController;
 use App\Http\Controllers\AdminCabang\PenggunaCabangController;
 use App\Http\Controllers\AdminCabang\PenugasanMengajarController;
+use App\Http\Controllers\AdminCabang\PenugasanPembinaController;
 use App\Http\Controllers\AdminCabang\SiswaController;
 use App\Http\Controllers\AdminCabang\TahunAjaranController;
 use App\Http\Controllers\AdminPusat\CabangSekolahController;
@@ -126,8 +127,10 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::post('/ekstrakurikuler', [EkstrakurikulerController::class, 'store'])->name('ekstrakurikuler.store');
                 Route::put('/ekstrakurikuler/{ekstrakurikuler}', [EkstrakurikulerController::class, 'update'])->name('ekstrakurikuler.update');
                 Route::delete('/ekstrakurikuler/{ekstrakurikuler}', [EkstrakurikulerController::class, 'destroy'])->name('ekstrakurikuler.destroy');
-                Route::post('/ekstrakurikuler/penugasan-pembina', [EkstrakurikulerController::class, 'storePenugasan'])->name('ekstrakurikuler.penugasan.store');
-                Route::delete('/ekstrakurikuler/penugasan-pembina/{penugasan_pembina}', [EkstrakurikulerController::class, 'destroyPenugasan'])->name('ekstrakurikuler.penugasan.destroy');
+
+                Route::get('/penugasan-pembina', [PenugasanPembinaController::class, 'index'])->name('penugasan-pembina.index');
+                Route::post('/penugasan-pembina', [PenugasanPembinaController::class, 'store'])->name('penugasan-pembina.store');
+                Route::delete('/penugasan-pembina/{penugasan_pembina}', [PenugasanPembinaController::class, 'destroy'])->name('penugasan-pembina.destroy');
 
                 Route::get('/penugasan-mengajar', [PenugasanMengajarController::class, 'index'])->name('penugasan-mengajar.index');
                 Route::post('/penugasan-mengajar', [PenugasanMengajarController::class, 'store'])->name('penugasan-mengajar.store');
@@ -202,9 +205,14 @@ Route::middleware(['auth', 'active'])->group(function () {
             });
         });
 
-    Route::view('/pembina', 'dashboard.pembina')
+    Route::prefix('pembina')
         ->middleware('role:pembina_ekstrakurikuler')
-        ->name('pembina.dashboard');
+        ->name('pembina.')
+        ->group(function () {
+            Route::view('/', 'dashboard.pembina')->name('dashboard');
+            Route::view('/ekstrakurikuler', 'pembina.ekstrakurikuler.index')->name('ekstrakurikuler.index');
+            Route::view('/penilaian', 'pembina.penilaian.index')->name('penilaian.index');
+        });
 
     Route::middleware('role:guru,pembina_ekstrakurikuler')->group(function () {
         Route::get('/arsip/tahun-ajaran', [ArsipTahunAjaranController::class, 'index'])->name('arsip.tahun-ajaran.index');

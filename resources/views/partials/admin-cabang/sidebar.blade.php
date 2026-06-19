@@ -56,6 +56,7 @@
                 @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.kelas.index', 'label' => 'Kelas'])
                 @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.mata-pelajaran.index', 'label' => 'Mata Pelajaran'])
                 @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.ekstrakurikuler.index', 'label' => 'Ekstrakurikuler'])
+                @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.penugasan-pembina.index', 'label' => 'Penugasan Pembina'])
                 @include('partials.admin-cabang.sidebar-link', ['route' => 'admin-cabang.data-akademik.penugasan-mengajar.index', 'label' => 'Penugasan Mengajar'])
             </div>
         </details>

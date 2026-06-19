@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.pembina')
 
 @section('title', 'Pembina Ekstrakurikuler')
 
