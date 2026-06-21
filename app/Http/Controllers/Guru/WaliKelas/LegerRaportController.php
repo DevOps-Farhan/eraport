@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Guru\Concerns\MenanganiWaliKelas;
 use App\Models\AbsensiSiswa;
 use App\Models\CatatanWaliKelas;
+use App\Models\Kelas;
 use App\Models\PencapaianTp;
 use App\Models\PenugasanMengajar;
 use App\Models\Siswa;
@@ -20,18 +21,26 @@ class LegerRaportController extends Controller
 {
     use MenanganiWaliKelas;
 
-    public function index(NilaiRaportService $nilaiRaportService): View
+    public function list(): View
     {
-        $kelas = $this->kelasWali();
-        $semester = $kelas
-            ? app(KonteksAkademik::class)->tahunAjaranAktif($this->cabangSekolahId())?->semesterBerjalan
-            : null;
+        $kelasList = $this->daftarKelasWali();
+
+        return view('guru.wali-kelas.leger-raport.list', [
+            'kelasList' => $kelasList,
+        ]);
+    }
+
+    public function index(Kelas $kelas, NilaiRaportService $nilaiRaportService): View
+    {
+        $this->pastikanAksesKelas($kelas);
+
+        $semester = app(KonteksAkademik::class)->tahunAjaranAktif($this->cabangSekolahId())?->semesterBerjalan;
 
         $siswaList = collect();
         $penugasanList = collect();
         $leger = [];
 
-        if ($kelas && $semester) {
+        if ($semester) {
             $siswaList = Siswa::query()
                 ->whereHas('rombelSiswa', function ($query) use ($kelas) {
                     $query->where('kelas_id', $kelas->id)
@@ -69,10 +78,10 @@ class LegerRaportController extends Controller
         ]);
     }
 
-    public function cetak(Siswa $siswa, NilaiRaportService $nilaiRaportService): Response
+    public function cetak(Kelas $kelas, Siswa $siswa, NilaiRaportService $nilaiRaportService): Response
     {
-        $kelas = $this->pastikanKelasWali()->load('tahunAjaran');
-        $this->pastikanSiswaDiKelasWali($siswa);
+        $kelas->load('tahunAjaran');
+        $this->pastikanSiswaDiKelasWali($siswa, $kelas);
 
         $semester = app(KonteksAkademik::class)
             ->tahunAjaranAktif($this->cabangSekolahId())

@@ -23,7 +23,7 @@ class UpdateMataPelajaranRequest extends FormRequest
 
         return [
             'kode' => [
-                'required',
+                'nullable',
                 'string',
                 'max:20',
                 Rule::unique('mata_pelajaran', 'kode')

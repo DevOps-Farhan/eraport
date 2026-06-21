@@ -56,11 +56,6 @@ class User extends Authenticatable
         return $this->peran === PeranPengguna::Guru;
     }
 
-    public function isPembina(): bool
-    {
-        return $this->peran === PeranPengguna::PembinaEkstrakurikuler;
-    }
-
     public function dashboardRouteName(): string
     {
         return match ($this->peran) {
@@ -77,7 +72,6 @@ class User extends Authenticatable
             PeranPengguna::AdminPusat => 'layouts.admin-pusat',
             PeranPengguna::AdminCabang => 'layouts.admin-cabang',
             PeranPengguna::Guru => 'layouts.guru',
-            PeranPengguna::PembinaEkstrakurikuler => 'layouts.pembina',
             default => 'layouts.app',
         };
     }

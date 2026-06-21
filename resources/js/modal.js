@@ -117,6 +117,13 @@ export const fillKelasForm = (prefix, kelas) => {
         tingkatSelect.value = kelas.tingkat ?? '';
     }
 
+    const faseSelect = document.getElementById(`${prefix}-fase`);
+    if (faseSelect && faseSelect.tagName === 'SELECT') {
+        faseSelect.value = kelas.fase ?? '';
+    } else if (faseSelect) {
+        faseSelect.value = kelas.fase ?? '';
+    }
+
     const waliSelect = document.getElementById(`${prefix}-wali_kelas_id`);
     if (waliSelect) {
         waliSelect.value = kelas.wali_kelas_id ?? '';
@@ -450,7 +457,8 @@ export const openModal = (modalId, data = null, tipe = null) => {
         if (modalId === 'modal-edit-siswa-wali') {
             const form = document.querySelector('[data-form-edit-siswa-wali]');
             if (form) {
-                form.action = `/guru/wali-kelas/kelas/siswa/${data.route_key}`;
+                const kelasId = form.dataset.kelasId;
+                form.action = `/guru/wali-kelas/kelas/${kelasId}/siswa/${data.route_key}`;
             }
             fillSiswaForm('wali-edit', data);
         }
@@ -458,7 +466,8 @@ export const openModal = (modalId, data = null, tipe = null) => {
             const form = document.querySelector('[data-form-hapus-siswa-wali]');
             const namaLabel = document.querySelector('[data-siswa-nama]');
             if (form) {
-                form.action = `/guru/wali-kelas/kelas/siswa/${data.route_key}`;
+                const kelasId = form.dataset.kelasId;
+                form.action = `/guru/wali-kelas/kelas/${kelasId}/siswa/${data.route_key}`;
             }
             if (namaLabel) {
                 namaLabel.textContent = data.nama;

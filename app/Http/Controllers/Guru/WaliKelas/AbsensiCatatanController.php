@@ -9,6 +9,7 @@ use App\Http\Controllers\Guru\Concerns\MenanganiWaliKelas;
 use App\Http\Requests\Guru\StoreAbsensiCatatanRequest;
 use App\Models\AbsensiSiswa;
 use App\Models\CatatanWaliKelas;
+use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Services\KonteksAkademik;
 use Illuminate\Http\RedirectResponse;
@@ -18,18 +19,26 @@ class AbsensiCatatanController extends Controller
 {
     use MenanganiWaliKelas;
 
-    public function index(): View
+    public function list(): View
     {
-        $kelas = $this->kelasWali();
-        $semester = $kelas
-            ? app(KonteksAkademik::class)->tahunAjaranAktif($this->cabangSekolahId())?->semesterBerjalan
-            : null;
+        $kelasList = $this->daftarKelasWali();
+
+        return view('guru.wali-kelas.absensi-catatan.list', [
+            'kelasList' => $kelasList,
+        ]);
+    }
+
+    public function index(Kelas $kelas): View
+    {
+        $this->pastikanAksesKelas($kelas);
+
+        $semester = app(KonteksAkademik::class)->tahunAjaranAktif($this->cabangSekolahId())?->semesterBerjalan;
 
         $siswaList = collect();
         $absensi = collect();
         $catatan = collect();
 
-        if ($kelas && $semester) {
+        if ($semester) {
             $siswaList = Siswa::query()
                 ->whereHas('rombelSiswa', function ($query) use ($kelas) {
                     $query->where('kelas_id', $kelas->id)
@@ -62,9 +71,9 @@ class AbsensiCatatanController extends Controller
         ]);
     }
 
-    public function store(StoreAbsensiCatatanRequest $request): RedirectResponse
+    public function store(StoreAbsensiCatatanRequest $request, Kelas $kelas): RedirectResponse
     {
-        $kelas = $this->pastikanKelasWali();
+        $this->pastikanAksesKelas($kelas);
         $semester = app(KonteksAkademik::class)
             ->tahunAjaranAktif($this->cabangSekolahId())
             ?->semesterBerjalan;
@@ -80,7 +89,7 @@ class AbsensiCatatanController extends Controller
                 continue;
             }
 
-            $this->pastikanSiswaDiKelasWali($siswa);
+            $this->pastikanSiswaDiKelasWali($siswa, $kelas);
 
             AbsensiSiswa::query()->updateOrCreate(
                 ['siswa_id' => $siswa->id, 'semester_id' => $semester->id],
@@ -99,7 +108,7 @@ class AbsensiCatatanController extends Controller
                 continue;
             }
 
-            $this->pastikanSiswaDiKelasWali($siswa);
+            $this->pastikanSiswaDiKelasWali($siswa, $kelas);
 
             CatatanWaliKelas::query()->updateOrCreate(
                 ['siswa_id' => $siswa->id, 'semester_id' => $semester->id],
@@ -108,7 +117,7 @@ class AbsensiCatatanController extends Controller
         }
 
         return redirect()
-            ->route('guru.wali-kelas.absensi-catatan')
+            ->route('guru.wali-kelas.absensi-catatan.show', $kelas)
             ->with('sukses', 'Absensi dan catatan berhasil disimpan.');
     }
 }

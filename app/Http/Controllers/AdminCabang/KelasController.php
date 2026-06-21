@@ -61,6 +61,7 @@ class KelasController extends Controller
             'tahun_ajaran_id' => $tahunAjaran->id,
             'jurusan_id' => $validated['jurusan_id'],
             'tingkat' => $validated['tingkat'],
+            'fase' => $validated['fase'],
             'nama' => $validated['nama'],
             'wali_kelas_id' => $validated['wali_kelas_id'] ?? null,
         ]);
@@ -80,6 +81,7 @@ class KelasController extends Controller
         $kelas->update([
             'jurusan_id' => $validated['jurusan_id'],
             'tingkat' => $validated['tingkat'],
+            'fase' => $validated['fase'],
             'nama' => $validated['nama'],
             'wali_kelas_id' => $validated['wali_kelas_id'] ?? null,
         ]);

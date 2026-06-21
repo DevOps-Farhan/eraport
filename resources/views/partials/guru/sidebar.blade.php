@@ -49,7 +49,7 @@
             </summary>
 
             <div class="ml-4 mt-1 space-y-1 border-l border-slate-200 pl-3">
-                @include('partials.guru.sidebar-link', ['route' => 'guru.kelola-nilai.tujuan-pembelajaran', 'label' => 'Tujuan Pembelajaran'])
+                @include('partials.guru.sidebar-link', ['route' => 'guru.kelola-nilai.tujuan-pembelajaran', 'routeIs' => 'guru.kelola-nilai.tujuan-pembelajaran*', 'label' => 'Tujuan Pembelajaran'])
                 @include('partials.guru.sidebar-link', ['route' => 'guru.kelola-nilai.input-nilai-tp', 'label' => 'Input Nilai Tujuan Pembelajaran'])
                 @include('partials.guru.sidebar-link', ['route' => 'guru.kelola-nilai.nilai-ujian', 'label' => 'Nilai Ujian'])
             </div>
@@ -78,9 +78,9 @@
             </summary>
 
             <div class="ml-4 mt-1 space-y-1 border-l border-slate-200 pl-3">
-                @include('partials.guru.sidebar-link', ['route' => 'guru.wali-kelas.kelas', 'label' => 'Kelola Data Kelas'])
-                @include('partials.guru.sidebar-link', ['route' => 'guru.wali-kelas.absensi-catatan', 'label' => 'Rekap Absensi & Catatan'])
-                @include('partials.guru.sidebar-link', ['route' => 'guru.wali-kelas.leger-raport', 'label' => 'Leger & Cetak Raport'])
+                @include('partials.guru.sidebar-link', ['route' => 'guru.wali-kelas.kelas', 'routeIs' => 'guru.wali-kelas.kelas*', 'label' => 'Kelola Data Kelas'])
+                @include('partials.guru.sidebar-link', ['route' => 'guru.wali-kelas.absensi-catatan', 'routeIs' => 'guru.wali-kelas.absensi-catatan*', 'label' => 'Rekap Absensi & Catatan'])
+                @include('partials.guru.sidebar-link', ['route' => 'guru.wali-kelas.leger-raport', 'routeIs' => 'guru.wali-kelas.leger-raport*', 'label' => 'Leger & Cetak Raport'])
             </div>
         </details>
 

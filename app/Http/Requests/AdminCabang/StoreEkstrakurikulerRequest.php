@@ -21,7 +21,7 @@ class StoreEkstrakurikulerRequest extends FormRequest
 
         return [
             'kode' => [
-                'required',
+                'nullable',
                 'string',
                 'max:20',
                 Rule::unique('ekstrakurikuler', 'kode')->where('cabang_sekolah_id', $cabangId),

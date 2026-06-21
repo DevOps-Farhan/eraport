@@ -1,4 +1,5 @@
 @php
+    use App\Enums\FaseKelas;
     use App\Enums\TingkatKelas;
     $readonly = $readonly ?? false;
     $jurusanList = $jurusanList ?? collect();
@@ -27,6 +28,18 @@
             <select id="{{ $prefix }}-tingkat" name="tingkat" required class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
                 @foreach (TingkatKelas::cases() as $tingkat)
                     <option value="{{ $tingkat->value }}">{{ $tingkat->label() }}</option>
+                @endforeach
+            </select>
+        @endif
+    </div>
+    <div>
+        <label for="{{ $prefix }}-fase" class="mb-1 block text-sm font-medium text-slate-700">Fase</label>
+        @if($readonly)
+            <input type="text" id="{{ $prefix }}-fase" readonly class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-sm">
+        @else
+            <select id="{{ $prefix }}-fase" name="fase" required class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+                @foreach (FaseKelas::cases() as $fase)
+                    <option value="{{ $fase->value }}">{{ $fase->label() }}</option>
                 @endforeach
             </select>
         @endif

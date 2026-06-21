@@ -16,41 +16,39 @@ class TujuanPembelajaranController extends Controller
 {
     use MenanganiPenugasanGuru;
 
-    public function index(Request $request): View
+    public function list(): View
     {
         $penugasanList = $this->penugasanGuru();
-        $penugasanKey = $request->query('penugasan');
-        $penugasanAktif = $penugasanKey
-            ? $penugasanList->first(fn (PenugasanMengajar $item) => $item->getRouteKey() === $penugasanKey)
-            : $penugasanList->first();
 
-        $tujuanPembelajaran = collect();
+        return view('guru.kelola-nilai.tujuan-pembelajaran.list', [
+            'penugasanList' => $penugasanList,
+        ]);
+    }
 
-        if ($penugasanAktif) {
-            $tujuanPembelajaran = TujuanPembelajaran::query()
-                ->where('penugasan_mengajar_id', $penugasanAktif->id)
-                ->orderBy('urutan')
-                ->orderBy('kode')
-                ->get();
-        }
+    public function index(PenugasanMengajar $penugasan): View
+    {
+        $penugasanAktif = $this->pastikanPenugasanGuru($penugasan);
+
+        $tujuanPembelajaran = TujuanPembelajaran::query()
+            ->where('penugasan_mengajar_id', $penugasanAktif->id)
+            ->orderBy('urutan')
+            ->orderBy('kode')
+            ->get();
 
         return view('guru.kelola-nilai.tujuan-pembelajaran.index', [
-            'penugasanList' => $penugasanList,
             'penugasanAktif' => $penugasanAktif,
             'tujuanPembelajaran' => $tujuanPembelajaran,
             'dapatDiedit' => $this->semesterDapatDiedit(),
         ]);
     }
 
-    public function store(StoreTujuanPembelajaranRequest $request): RedirectResponse
+    public function store(StoreTujuanPembelajaranRequest $request, PenugasanMengajar $penugasan): RedirectResponse
     {
         if (! $this->semesterDapatDiedit()) {
             return back()->with('gagal', 'Semester tidak sedang berjalan. Data tidak dapat diubah.');
         }
 
-        $penugasan = $this->pastikanPenugasanGuru(
-            PenugasanMengajar::query()->findOrFail($request->integer('penugasan_mengajar_id')),
-        );
+        $penugasan = $this->pastikanPenugasanGuru($penugasan);
 
         TujuanPembelajaran::query()->create([
             'penugasan_mengajar_id' => $penugasan->id,
@@ -60,7 +58,7 @@ class TujuanPembelajaranController extends Controller
         ]);
 
         return redirect()
-            ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $penugasan->getRouteKey()])
+            ->route('guru.kelola-nilai.tujuan-pembelajaran.show', $penugasan)
             ->with('sukses', 'Tujuan pembelajaran berhasil ditambahkan.');
     }
 
@@ -79,7 +77,7 @@ class TujuanPembelajaranController extends Controller
         ]);
 
         return redirect()
-            ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $tujuanPembelajaran->penugasanMengajar->getRouteKey()])
+            ->route('guru.kelola-nilai.tujuan-pembelajaran.show', $tujuanPembelajaran->penugasanMengajar)
             ->with('sukses', 'Tujuan pembelajaran berhasil diperbarui.');
     }
 
@@ -90,18 +88,18 @@ class TujuanPembelajaranController extends Controller
         }
 
         $tujuanPembelajaran = $this->pastikanTujuanPembelajaranGuru($tujuanPembelajaran);
-        $penugasanKey = $tujuanPembelajaran->penugasanMengajar->getRouteKey();
+        $penugasan = $tujuanPembelajaran->penugasanMengajar;
 
         if ($tujuanPembelajaran->nilaiTujuanPembelajaran()->exists()) {
             return redirect()
-                ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $penugasanKey])
+                ->route('guru.kelola-nilai.tujuan-pembelajaran.show', $penugasan)
                 ->with('gagal', 'Tujuan pembelajaran tidak dapat dihapus karena sudah memiliki nilai.');
         }
 
         $tujuanPembelajaran->delete();
 
         return redirect()
-            ->route('guru.kelola-nilai.tujuan-pembelajaran', ['penugasan' => $penugasanKey])
+            ->route('guru.kelola-nilai.tujuan-pembelajaran.show', $penugasan)
             ->with('sukses', 'Tujuan pembelajaran berhasil dihapus.');
     }
 }

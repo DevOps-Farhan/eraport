@@ -22,6 +22,7 @@
                     <tr>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Nama</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Jurusan</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Fase</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Tingkat</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Wali Kelas</th>
                         <th class="px-4 py-3 text-right text-xs font-semibold uppercase text-slate-500">Aksi</th>
@@ -32,6 +33,7 @@
                         <tr class="hover:bg-slate-50">
                             <td class="px-4 py-3 text-sm font-medium">{{ $item->nama }}</td>
                             <td class="px-4 py-3 text-sm">{{ $item->jurusan->nama }}</td>
+                            <td class="px-4 py-3 text-sm font-medium">{{ $item->fase->label() }}</td>
                             <td class="px-4 py-3 text-sm">{{ $item->tingkat->label() }}</td>
                             <td class="px-4 py-3 text-sm">{{ $item->waliKelas?->nama ?? '—' }}</td>
                             <td class="px-4 py-3 text-right text-sm">
@@ -41,7 +43,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="px-4 py-10 text-center text-sm text-slate-500">Belum ada kelas untuk tahun ajaran ini.</td></tr>
+                        <tr><td colspan="6" class="px-4 py-10 text-center text-sm text-slate-500">Belum ada kelas untuk tahun ajaran ini.</td></tr>
                     @endforelse
                 </tbody>
             </table>

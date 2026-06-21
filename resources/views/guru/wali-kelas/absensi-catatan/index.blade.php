@@ -4,6 +4,12 @@
 
 @section('content')
     <div class="mb-6">
+        <a href="{{ route('guru.wali-kelas.absensi-catatan') }}" class="mb-2 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-slate-800">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            Kembali
+        </a>
         <h1 class="text-2xl font-semibold text-slate-900">Rekap Absensi dan Catatan</h1>
         <p class="mt-1 text-sm text-slate-500">Rekap kehadiran siswa dan catatan wali kelas akhir semester.</p>
     </div>
@@ -21,7 +27,7 @@
             Belum ada siswa di kelas {{ $kelas->nama }}.
         </div>
     @else
-        <form method="POST" action="{{ route('guru.wali-kelas.absensi-catatan.store') }}">
+        <form method="POST" action="{{ route('guru.wali-kelas.absensi-catatan.store', $kelas) }}">
             @csrf
             <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
                 <table class="min-w-full divide-y divide-slate-200 text-sm">

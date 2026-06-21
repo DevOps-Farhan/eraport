@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\AdminCabang;
 
+use App\Enums\FaseKelas;
 use App\Enums\PeranPengguna;
 use App\Enums\TingkatKelas;
 use App\Services\KonteksAkademik;
@@ -46,6 +47,7 @@ class StoreKelasRequest extends FormRequest
                 Rule::exists('jurusan', 'id')->where('cabang_sekolah_id', $cabangId),
             ],
             'tingkat' => ['required', Rule::enum(TingkatKelas::class)],
+            'fase' => ['required', Rule::enum(FaseKelas::class)],
             'nama' => [
                 'required',
                 'string',
@@ -70,6 +72,7 @@ class StoreKelasRequest extends FormRequest
         return [
             'jurusan_id.required' => 'Jurusan wajib dipilih.',
             'tingkat.required' => 'Tingkat wajib dipilih.',
+            'fase.required' => 'Fase wajib dipilih.',
             'nama.required' => 'Nama kelas wajib diisi.',
             'nama.unique' => 'Nama kelas sudah digunakan pada tahun ajaran ini.',
             'tahun_ajaran_id.required' => 'Tidak ada tahun ajaran aktif. Aktifkan tahun ajaran terlebih dahulu.',

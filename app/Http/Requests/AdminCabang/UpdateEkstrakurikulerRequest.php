@@ -22,7 +22,7 @@ class UpdateEkstrakurikulerRequest extends FormRequest
 
         return [
             'kode' => [
-                'required',
+                'nullable',
                 'string',
                 'max:20',
                 Rule::unique('ekstrakurikuler', 'kode')

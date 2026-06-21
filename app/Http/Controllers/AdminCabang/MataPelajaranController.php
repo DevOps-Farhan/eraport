@@ -31,7 +31,7 @@ class MataPelajaranController extends Controller
     {
         MataPelajaran::query()->create([
             'cabang_sekolah_id' => $this->cabangSekolahId(),
-            'kode' => $request->string('kode')->value(),
+            'kode' => $request->input('kode'),
             'nama' => $request->string('nama')->value(),
             'kelompok' => $request->enum('kelompok', KelompokMataPelajaran::class),
             'aktif' => $request->boolean('aktif', true),
@@ -47,7 +47,7 @@ class MataPelajaranController extends Controller
         $this->pastikanMilikCabang($mataPelajaran);
 
         $mataPelajaran->update([
-            'kode' => $request->string('kode')->value(),
+            'kode' => $request->input('kode'),
             'nama' => $request->string('nama')->value(),
             'kelompok' => $request->enum('kelompok', KelompokMataPelajaran::class),
             'aktif' => $request->boolean('aktif', false),

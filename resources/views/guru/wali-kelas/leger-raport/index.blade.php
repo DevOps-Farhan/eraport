@@ -4,6 +4,12 @@
 
 @section('content')
     <div class="mb-6">
+        <a href="{{ route('guru.wali-kelas.leger-raport') }}" class="mb-2 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-slate-800">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            Kembali
+        </a>
         <h1 class="text-2xl font-semibold text-slate-900">Leger & Cetak Raport</h1>
         <p class="mt-1 text-sm text-slate-500">Lihat leger nilai dan cetak raport siswa.</p>
     </div>
@@ -47,7 +53,7 @@
                                 </td>
                             @endforeach
                             <td class="px-4 py-3 text-right">
-                                <a href="{{ route('guru.wali-kelas.leger-raport.cetak', $siswa) }}" class="rounded-lg px-2.5 py-1.5 text-sky-600 hover:bg-sky-50" target="_blank">Cetak Raport</a>
+                                <a href="{{ route('guru.wali-kelas.leger-raport.cetak', [$kelas, $siswa]) }}" class="rounded-lg px-2.5 py-1.5 text-sky-600 hover:bg-sky-50" target="_blank">Cetak Raport</a>
                             </td>
                         </tr>
                     @endforeach

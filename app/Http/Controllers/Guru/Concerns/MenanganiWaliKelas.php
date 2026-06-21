@@ -20,35 +20,39 @@ trait MenanganiWaliKelas
         return $cabangId;
     }
 
-    protected function kelasWali(): ?Kelas
+    protected function daftarKelasWali()
     {
         $tahunAjaran = app(KonteksAkademik::class)->tahunAjaranAktif($this->cabangSekolahId());
 
         if (! $tahunAjaran) {
-            return null;
+            return collect();
         }
 
         return Kelas::query()
             ->with(['jurusan', 'tahunAjaran'])
+            ->withCount(['rombelSiswa as jumlah_siswa' => function ($query) {
+                $query->where('status', StatusRombel::Aktif);
+            }])
             ->where('tahun_ajaran_id', $tahunAjaran->id)
             ->where('wali_kelas_id', auth()->id())
-            ->first();
+            ->get();
     }
 
-    protected function pastikanKelasWali(): Kelas
+    protected function pastikanAksesKelas(Kelas $kelas): void
     {
-        $kelas = $this->kelasWali();
+        $tahunAjaran = app(KonteksAkademik::class)->tahunAjaranAktif($this->cabangSekolahId());
 
-        if (! $kelas) {
+        if (! $tahunAjaran ||
+            $kelas->tahun_ajaran_id !== $tahunAjaran->id ||
+            $kelas->wali_kelas_id !== auth()->id()
+        ) {
             abort(404);
         }
-
-        return $kelas;
     }
 
-    protected function pastikanSiswaDiKelasWali(Siswa $siswa): Siswa
+    protected function pastikanSiswaDiKelasWali(Siswa $siswa, Kelas $kelas): Siswa
     {
-        $kelas = $this->pastikanKelasWali();
+        $this->pastikanAksesKelas($kelas);
 
         $adaDiKelas = $siswa->rombelSiswa()
             ->where('kelas_id', $kelas->id)

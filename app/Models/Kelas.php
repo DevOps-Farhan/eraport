@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\FaseKelas;
 use App\Enums\TingkatKelas;
 use App\Models\Concerns\HasEncryptedRouteKey;
 use Database\Factories\KelasFactory;
@@ -21,6 +22,7 @@ class Kelas extends Model
         'tahun_ajaran_id',
         'jurusan_id',
         'tingkat',
+        'fase',
         'nama',
         'wali_kelas_id',
     ];
@@ -32,6 +34,7 @@ class Kelas extends Model
     {
         return [
             'tingkat' => TingkatKelas::class,
+            'fase' => FaseKelas::class,
         ];
     }
 

@@ -127,7 +127,6 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::post('/ekstrakurikuler', [EkstrakurikulerController::class, 'store'])->name('ekstrakurikuler.store');
                 Route::put('/ekstrakurikuler/{ekstrakurikuler}', [EkstrakurikulerController::class, 'update'])->name('ekstrakurikuler.update');
                 Route::delete('/ekstrakurikuler/{ekstrakurikuler}', [EkstrakurikulerController::class, 'destroy'])->name('ekstrakurikuler.destroy');
-
                 Route::get('/penugasan-pembina', [PenugasanPembinaController::class, 'index'])->name('penugasan-pembina.index');
                 Route::post('/penugasan-pembina', [PenugasanPembinaController::class, 'store'])->name('penugasan-pembina.store');
                 Route::delete('/penugasan-pembina/{penugasan_pembina}', [PenugasanPembinaController::class, 'destroy'])->name('penugasan-pembina.destroy');
@@ -177,8 +176,9 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::view('/', 'guru.dashboard')->name('dashboard');
 
             Route::prefix('kelola-nilai')->name('kelola-nilai.')->group(function () {
-                Route::get('/tujuan-pembelajaran', [TujuanPembelajaranController::class, 'index'])->name('tujuan-pembelajaran');
-                Route::post('/tujuan-pembelajaran', [TujuanPembelajaranController::class, 'store'])->name('tujuan-pembelajaran.store');
+                Route::get('/tujuan-pembelajaran', [TujuanPembelajaranController::class, 'list'])->name('tujuan-pembelajaran');
+                Route::get('/tujuan-pembelajaran/{penugasan}', [TujuanPembelajaranController::class, 'index'])->name('tujuan-pembelajaran.show');
+                Route::post('/tujuan-pembelajaran/{penugasan}', [TujuanPembelajaranController::class, 'store'])->name('tujuan-pembelajaran.store');
                 Route::put('/tujuan-pembelajaran/{tujuan_pembelajaran}', [TujuanPembelajaranController::class, 'update'])->name('tujuan-pembelajaran.update');
                 Route::delete('/tujuan-pembelajaran/{tujuan_pembelajaran}', [TujuanPembelajaranController::class, 'destroy'])->name('tujuan-pembelajaran.destroy');
 
@@ -192,27 +192,25 @@ Route::middleware(['auth', 'active'])->group(function () {
             });
 
             Route::prefix('wali-kelas')->name('wali-kelas.')->group(function () {
-                Route::get('/kelas', [WaliKelasController::class, 'index'])->name('kelas');
-                Route::post('/kelas/siswa', [WaliKelasController::class, 'storeSiswa'])->name('kelas.store-siswa');
-                Route::put('/kelas/siswa/{siswa}', [WaliKelasController::class, 'updateSiswa'])->name('kelas.update-siswa');
-                Route::delete('/kelas/siswa/{siswa}', [WaliKelasController::class, 'destroySiswa'])->name('kelas.destroy-siswa');
+                Route::get('/kelas', [WaliKelasController::class, 'list'])->name('kelas');
+                Route::get('/kelas/{kelas}', [WaliKelasController::class, 'index'])->name('kelas.show');
+                Route::post('/kelas/{kelas}/siswa', [WaliKelasController::class, 'storeSiswa'])->name('kelas.store-siswa');
+                Route::put('/kelas/{kelas}/siswa/{siswa}', [WaliKelasController::class, 'updateSiswa'])->name('kelas.update-siswa');
+                Route::delete('/kelas/{kelas}/siswa/{siswa}', [WaliKelasController::class, 'destroySiswa'])->name('kelas.destroy-siswa');
 
-                Route::get('/absensi-catatan', [AbsensiCatatanController::class, 'index'])->name('absensi-catatan');
-                Route::post('/absensi-catatan', [AbsensiCatatanController::class, 'store'])->name('absensi-catatan.store');
+                Route::get('/absensi-catatan', [AbsensiCatatanController::class, 'list'])->name('absensi-catatan');
+                Route::get('/absensi-catatan/{kelas}', [AbsensiCatatanController::class, 'index'])->name('absensi-catatan.show');
+                Route::post('/absensi-catatan/{kelas}', [AbsensiCatatanController::class, 'store'])->name('absensi-catatan.store');
 
-                Route::get('/leger-raport', [LegerRaportController::class, 'index'])->name('leger-raport');
-                Route::get('/leger-raport/{siswa}/cetak', [LegerRaportController::class, 'cetak'])->name('leger-raport.cetak');
+                Route::get('/leger-raport', [LegerRaportController::class, 'list'])->name('leger-raport');
+                Route::get('/leger-raport/{kelas}', [LegerRaportController::class, 'index'])->name('leger-raport.show');
+                Route::get('/leger-raport/{kelas}/{siswa}/cetak', [LegerRaportController::class, 'cetak'])->name('leger-raport.cetak');
             });
         });
 
-    Route::prefix('pembina')
+    Route::view('/pembina', 'dashboard.pembina')
         ->middleware('role:pembina_ekstrakurikuler')
-        ->name('pembina.')
-        ->group(function () {
-            Route::view('/', 'dashboard.pembina')->name('dashboard');
-            Route::view('/ekstrakurikuler', 'pembina.ekstrakurikuler.index')->name('ekstrakurikuler.index');
-            Route::view('/penilaian', 'pembina.penilaian.index')->name('penilaian.index');
-        });
+        ->name('pembina.dashboard');
 
     Route::middleware('role:guru,pembina_ekstrakurikuler')->group(function () {
         Route::get('/arsip/tahun-ajaran', [ArsipTahunAjaranController::class, 'index'])->name('arsip.tahun-ajaran.index');

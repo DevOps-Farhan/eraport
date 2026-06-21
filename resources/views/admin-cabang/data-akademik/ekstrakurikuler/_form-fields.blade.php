@@ -5,7 +5,7 @@
 <div class="space-y-4">
     <div>
         <label for="{{ $prefix }}-kode" class="mb-1 block text-sm font-medium text-slate-700">Kode</label>
-        <input type="text" id="{{ $prefix }}-kode" name="kode" @unless($readonly) required @endunless @if($readonly) readonly @endif class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm @if($readonly) bg-slate-50 @endif">
+        <input type="text" id="{{ $prefix }}-kode" name="kode" @if($readonly) readonly @endif class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm @if($readonly) bg-slate-50 @endif">
     </div>
     <div>
         <label for="{{ $prefix }}-nama" class="mb-1 block text-sm font-medium text-slate-700">Nama Ekstrakurikuler</label>

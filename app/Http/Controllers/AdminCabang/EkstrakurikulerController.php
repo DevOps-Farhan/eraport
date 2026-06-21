@@ -35,7 +35,7 @@ class EkstrakurikulerController extends Controller
     {
         Ekstrakurikuler::query()->create([
             'cabang_sekolah_id' => $this->cabangSekolahId(),
-            'kode' => $request->string('kode')->value(),
+            'kode' => $request->input('kode'),
             'nama' => $request->string('nama')->value(),
             'aktif' => $request->boolean('aktif', true),
         ]);
@@ -50,7 +50,7 @@ class EkstrakurikulerController extends Controller
         $this->pastikanMilikCabang($ekstrakurikuler);
 
         $ekstrakurikuler->update([
-            'kode' => $request->string('kode')->value(),
+            'kode' => $request->input('kode'),
             'nama' => $request->string('nama')->value(),
             'aktif' => $request->boolean('aktif', false),
         ]);

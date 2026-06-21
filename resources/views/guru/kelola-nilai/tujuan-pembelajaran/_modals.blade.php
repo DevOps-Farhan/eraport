@@ -3,7 +3,7 @@
 <div id="modal-tambah-tp" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-slate-900/50 p-4" role="dialog">
     <div class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
         <h2 class="text-lg font-semibold text-slate-900">Tambah Tujuan Pembelajaran</h2>
-        <form method="POST" action="{{ route('guru.kelola-nilai.tujuan-pembelajaran.store') }}" class="mt-4 space-y-4">
+        <form method="POST" action="{{ route('guru.kelola-nilai.tujuan-pembelajaran.store', $penugasanAktif) }}" class="mt-4 space-y-4">
             @csrf
             <input type="hidden" name="penugasan_mengajar_id" value="{{ $penugasanAktif->id }}">
             <div>
