@@ -129,6 +129,11 @@ class LegerRaportController extends Controller
             ->where('semester_id', $semester->id)
             ->value('catatan');
 
+        $kokurikuler = \App\Models\Kokurikuler::query()
+            ->where('siswa_id', $siswa->id)
+            ->where('semester_id', $semester->id)
+            ->value('capaian_kokurikuler');
+
         $pdf = Pdf::loadView('guru.wali-kelas.leger-raport.pdf', [
             'siswa' => $siswa,
             'kelas' => $kelas,
@@ -138,6 +143,7 @@ class LegerRaportController extends Controller
             'nilaiMapel' => $nilaiMapel,
             'absensi' => $absensi,
             'catatan' => $catatan,
+            'kokurikuler' => $kokurikuler,
         ]);
 
         $filename = 'raport-'.$siswa->nis.'-'.$semester->jenis->value.'.pdf';

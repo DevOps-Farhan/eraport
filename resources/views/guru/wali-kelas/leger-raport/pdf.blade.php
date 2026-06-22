@@ -62,7 +62,21 @@
         @endif
     @endforeach
 
-    <h2>C. Ketidakhadiran</h2>
+    <h2>C. Kokurikuler</h2>
+    <table style="margin-bottom: 16px;">
+        <thead>
+            <tr>
+                <th style="width: 100%;">Capaian Kokurikuler</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 12px;">{{ $kokurikuler ?: '—' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>D. Ketidakhadiran</h2>
     <table>
         <tr>
             <th>Sakit</th>
@@ -76,7 +90,7 @@
         </tr>
     </table>
 
-    <h2>D. Catatan Wali Kelas</h2>
+    <h2>E. Catatan Wali Kelas</h2>
     <p>{{ $catatan ?: '—' }}</p>
 
     <table class="ttd">

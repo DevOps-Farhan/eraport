@@ -80,6 +80,7 @@
             <div class="ml-4 mt-1 space-y-1 border-l border-slate-200 pl-3">
                 @include('partials.guru.sidebar-link', ['route' => 'guru.wali-kelas.kelas', 'routeIs' => 'guru.wali-kelas.kelas*', 'label' => 'Kelola Data Kelas'])
                 @include('partials.guru.sidebar-link', ['route' => 'guru.wali-kelas.absensi-catatan', 'routeIs' => 'guru.wali-kelas.absensi-catatan*', 'label' => 'Rekap Absensi & Catatan'])
+                @include('partials.guru.sidebar-link', ['route' => 'guru.wali-kelas.kokurikuler', 'routeIs' => 'guru.wali-kelas.kokurikuler*', 'label' => 'Kokurikuler'])
                 @include('partials.guru.sidebar-link', ['route' => 'guru.wali-kelas.leger-raport', 'routeIs' => 'guru.wali-kelas.leger-raport*', 'label' => 'Leger & Cetak Raport'])
             </div>
         </details>

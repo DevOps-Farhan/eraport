@@ -19,6 +19,7 @@ use App\Http\Controllers\Guru\NilaiUjianController;
 use App\Http\Controllers\Guru\TujuanPembelajaranController;
 use App\Http\Controllers\Guru\WaliKelas\AbsensiCatatanController;
 use App\Http\Controllers\Guru\WaliKelas\KelasController as WaliKelasController;
+use App\Http\Controllers\Guru\WaliKelas\KokurikulerController;
 use App\Http\Controllers\Guru\WaliKelas\LegerRaportController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Auth;
@@ -201,6 +202,10 @@ Route::middleware(['auth', 'active'])->group(function () {
                 Route::get('/absensi-catatan', [AbsensiCatatanController::class, 'list'])->name('absensi-catatan');
                 Route::get('/absensi-catatan/{kelas}', [AbsensiCatatanController::class, 'index'])->name('absensi-catatan.show');
                 Route::post('/absensi-catatan/{kelas}', [AbsensiCatatanController::class, 'store'])->name('absensi-catatan.store');
+
+                Route::get('/kokurikuler', [KokurikulerController::class, 'list'])->name('kokurikuler');
+                Route::get('/kokurikuler/{kelas}', [KokurikulerController::class, 'index'])->name('kokurikuler.show');
+                Route::post('/kokurikuler/{kelas}', [KokurikulerController::class, 'store'])->name('kokurikuler.store');
 
                 Route::get('/leger-raport', [LegerRaportController::class, 'list'])->name('leger-raport');
                 Route::get('/leger-raport/{kelas}', [LegerRaportController::class, 'index'])->name('leger-raport.show');
