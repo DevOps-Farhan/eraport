@@ -25,6 +25,14 @@ class UpdateCabangSekolahRequest extends FormRequest
             'kepala_sekolah' => ['required', 'string', 'max:255'],
             'alamat' => ['nullable', 'string'],
             'telepon' => ['nullable', 'string', 'max:20'],
+            'npsn' => ['required', 'numeric', 'digits_between:1,8'],
+            'nss' => ['required', 'numeric'],
+            'desa_kelurahan' => ['required', 'string', 'max:255'],
+            'kecamatan' => ['required', 'string', 'max:255'],
+            'kabupaten_kota' => ['required', 'string', 'max:255'],
+            'provinsi' => ['required', 'string', 'max:255'],
+            'website' => ['nullable', 'url', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
             'aktif' => ['sometimes', 'boolean'],
         ];
     }

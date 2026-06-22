@@ -48,4 +48,12 @@ class Ekstrakurikuler extends Model
     {
         return $this->hasMany(PenugasanPembina::class, 'ekstrakurikuler_id');
     }
+
+    /**
+     * @return HasMany<AnggotaEkstrakurikuler, $this>
+     */
+    public function anggotaEkstrakurikuler(): HasMany
+    {
+        return $this->hasMany(AnggotaEkstrakurikuler::class, 'ekstrakurikuler_id');
+    }
 }

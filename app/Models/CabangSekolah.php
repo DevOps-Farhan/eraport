@@ -21,6 +21,14 @@ class CabangSekolah extends Model
         'kepala_sekolah',
         'alamat',
         'telepon',
+        'npsn',
+        'nss',
+        'desa_kelurahan',
+        'kecamatan',
+        'kabupaten_kota',
+        'provinsi',
+        'website',
+        'email',
         'aktif',
     ];
 

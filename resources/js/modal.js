@@ -293,6 +293,36 @@ export const fillCabangForm = (prefix, cabang) => {
     setValue('kepala_sekolah', cabang.kepala_sekolah);
     setValue('alamat', cabang.alamat);
     setValue('telepon', cabang.telepon);
+    setValue('npsn', cabang.npsn);
+    setValue('nss', cabang.nss);
+    setValue('desa_kelurahan', cabang.desa_kelurahan);
+    setValue('kecamatan', cabang.kecamatan);
+    setValue('kabupaten_kota', cabang.kabupaten_kota);
+    setValue('provinsi', cabang.provinsi);
+
+    const setLinkOrValue = (field, value, isEmail = false) => {
+        const element = document.getElementById(`${prefix}-${field}`);
+        if (element) {
+            if (element.tagName === 'A') {
+                if (value) {
+                    element.href = isEmail ? `mailto:${value}` : value;
+                    element.textContent = value;
+                    element.classList.remove('hidden');
+                    const emptySpan = document.getElementById(`${prefix}-${field}-empty`);
+                    if (emptySpan) emptySpan.classList.add('hidden');
+                } else {
+                    element.classList.add('hidden');
+                    const emptySpan = document.getElementById(`${prefix}-${field}-empty`);
+                    if (emptySpan) emptySpan.classList.remove('hidden');
+                }
+            } else {
+                element.value = value ?? '';
+            }
+        }
+    };
+
+    setLinkOrValue('website', cabang.website);
+    setLinkOrValue('email', cabang.email, true);
 
     const aktifCheckbox = document.getElementById(`${prefix}-aktif`);
     if (aktifCheckbox && aktifCheckbox.type === 'checkbox') {

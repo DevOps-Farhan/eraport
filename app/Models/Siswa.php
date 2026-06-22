@@ -74,4 +74,20 @@ class Siswa extends Model
     {
         return $this->hasMany(RombelSiswa::class, 'siswa_id');
     }
+
+    /**
+     * @return HasMany<NilaiUjian, $this>
+     */
+    public function nilaiUjian(): HasMany
+    {
+        return $this->hasMany(NilaiUjian::class, 'siswa_id');
+    }
+
+    /**
+     * @return HasMany<AnggotaEkstrakurikuler, $this>
+     */
+    public function anggotaEkstrakurikuler(): HasMany
+    {
+        return $this->hasMany(AnggotaEkstrakurikuler::class, 'siswa_id');
+    }
 }
