@@ -134,6 +134,12 @@ class LegerRaportController extends Controller
             ->where('semester_id', $semester->id)
             ->value('capaian_kokurikuler');
 
+        $nilaiEkstrakurikuler = \App\Models\NilaiEkstrakurikuler::query()
+            ->with('ekstrakurikuler')
+            ->where('siswa_id', $siswa->id)
+            ->where('semester_id', $semester->id)
+            ->get();
+
         $pdf = Pdf::loadView('guru.wali-kelas.leger-raport.pdf', [
             'siswa' => $siswa,
             'kelas' => $kelas,
@@ -144,9 +150,14 @@ class LegerRaportController extends Controller
             'absensi' => $absensi,
             'catatan' => $catatan,
             'kokurikuler' => $kokurikuler,
+            'nilaiEkstrakurikuler' => $nilaiEkstrakurikuler,
         ]);
 
-        $filename = 'raport-'.$siswa->nis.'-'.$semester->jenis->value.'.pdf';
+        $filename = 'Raport - ' . $siswa->nama . '.pdf';
+
+        if (request('action') === 'preview') {
+            return $pdf->stream($filename);
+        }
 
         return $pdf->download($filename);
     }

@@ -53,7 +53,14 @@
                                 </td>
                             @endforeach
                             <td class="px-4 py-3 text-right">
-                                <a href="{{ route('guru.wali-kelas.leger-raport.cetak', [$kelas, $siswa]) }}" class="rounded-lg px-2.5 py-1.5 text-sky-600 hover:bg-sky-50" target="_blank">Cetak Raport</a>
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('guru.wali-kelas.leger-raport.cetak', [$kelas, $siswa, 'action' => 'preview']) }}" class="inline-flex items-center rounded-lg border border-sky-600 px-2.5 py-1.5 text-xs font-medium text-sky-600 transition hover:bg-sky-50" target="_blank">
+                                        Preview
+                                    </a>
+                                    <a href="{{ route('guru.wali-kelas.leger-raport.cetak', [$kelas, $siswa]) }}" class="inline-flex items-center rounded-lg bg-sky-600 px-2.5 py-1.5 text-xs font-medium text-white transition hover:bg-sky-700" target="_blank">
+                                        Cetak
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
