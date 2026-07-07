@@ -1,0 +1,16 @@
+.git
+.gitignore
+node_modules
+storage/*
+bootstrap/cache/*
+npm-debug.log*
+npm-error.log*
+.env
+.env.*
+.DS_Store
+.idea
+.vscode
+docker-compose.yml
+Dockerfile
+*.log
+public/build
